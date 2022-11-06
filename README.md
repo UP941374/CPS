@@ -10,7 +10,9 @@ Below you will find some useful links and notes.
 [Course organisation](https://github.com/UP941374/CPS/blob/main/PDFs/CPS_Course_Organization.pdf)
 
 ## SIMULATION NOTES AND LINKS
-[Yakindu tutorials](https://www.itemis.com/en/yakindu/state-machine/documentation/tutorials/tutorial_five-minutes_tutorial?hsLang=de)
+[Yakindu tutorials](https://www.itemis.com/en/yakindu/state-machine/documentation/tutorials/tutorial_five-minutes_tutorial?hsLang=de) 
+[Yakindu User Guide](https://www.itemis.com/en/yakindu/state-machine/documentation/user-guide/sclang_graphical_elements#sclang_graphical_elements)
+
 
 [SCT Interface](https://github.com/UP941374/CPS/blob/main/PDFs/SCT_interface_manual.pdf)
 
