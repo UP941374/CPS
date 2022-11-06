@@ -3,7 +3,7 @@
 Below you will find some useful links and notes.
 
 ## PROJECT ORGANISATION
-[KANBAN Board](https://github.com/users/UP941374/projects/2/views/1)
+[KANBAN Board](https://github.com/users/UP941374/projects/3)
 
 [Assignment PDF (MAZE TURTLE)](https://github.com/UP941374/CPS/blob/main/MazeTurtle.pdf)
 
