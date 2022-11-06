@@ -20,8 +20,7 @@ Below you will find some useful links and notes.
 `ros2 launch turtlebot3_gazebo empty_world.launch.py`
 
 ### START GEZEBO (maze)
-you can add the maze in the INSERT -> maze model section
-`maze start command`
+`ros2 launch turtlebot3_gazebo maze_world_launch.py`
 
 ### TO START GENERATED CODE (BY YAKINDU) (must be in the correct dir)
 `python3 file_name.py`
