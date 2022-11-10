@@ -553,7 +553,7 @@ class Model:
 	def __entry_action_main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________nbr_forward(self):
 		"""Entry action for state 'forward'..
 		"""
-		self.output.speed = 0.15
+		self.output.speed = 0.85
 		
 	def __entry_action_main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________nbr_wall_detected(self):
 		""".
@@ -564,19 +564,18 @@ class Model:
 	def __entry_action_main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________nbr_rotate_left(self):
 		"""Entry action for state 'rotate left'..
 		"""
-		self.output.rotation = 0.5
-		self.imu.old_yaw = self.imu.yaw
+		self.output.rotation = 0.05
 		
 	def __entry_action_main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________nbr_rotate_right(self):
 		"""Entry action for state 'rotate right'..
 		"""
-		self.output.rotation = -0.5
+		self.output.rotation = -0.05
 		self.imu.old_yaw = self.imu.yaw
 		
 	def __entry_action_main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________nbr_rotate_back(self):
 		"""Entry action for state 'rotate back'..
 		"""
-		self.output.rotation = 0.5
+		self.output.rotation = 0.05
 		self.imu.old_yaw = self.imu.yaw
 		
 	def __entry_action_main_region_autonomous_mode___logging_rotation_calibration_rotate_left(self):
@@ -1411,9 +1410,9 @@ class Model:
 		if self.__do_completion:
 			self.__state_vector[1] = self.State.null_state
 			self.__state_conf_vector_position = 1
-			if self.laser_distance.d90 > self.grid.grid_size:
+			if self.laser_distance.d90 > ((self.laser_distance.d90 + self.laser_distance.dm90)):
 				self.__enter_sequence_main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________nbr_rotate_left_default()
-			elif self.laser_distance.dm90 > self.grid.grid_size:
+			elif self.laser_distance.dm90 > ((self.laser_distance.d90 + self.laser_distance.dm90)):
 				self.__enter_sequence_main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________nbr_rotate_right_default()
 			else:
 				self.__enter_sequence_main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________nbr_rotate_back_default()
@@ -1429,12 +1428,6 @@ class Model:
 		"""
 		transitioned_after = transitioned_before
 		if not self.__do_completion:
-			if transitioned_after < 1:
-				if (self.imu.old_yaw - (self.imu.yaw if self.imu.yaw > 0 else -self.imu.yaw)) > 85:
-					self.__exit_sequence_main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________nbr_rotate_left()
-					self.__enter_sequence_main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________nbr_forward_default()
-					self.__main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________react(1)
-					transitioned_after = 1
 			#If no transition was taken then execute local reactions
 			if transitioned_after == transitioned_before:
 				transitioned_after = self.__main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________react(transitioned_before)
@@ -1447,7 +1440,7 @@ class Model:
 		transitioned_after = transitioned_before
 		if not self.__do_completion:
 			if transitioned_after < 1:
-				if (self.imu.old_yaw - (self.imu.yaw if self.imu.yaw > 0 else -self.imu.yaw)) > 85:
+				if (self.imu.old_yaw - self.imu.yaw) > 89:
 					self.__exit_sequence_main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________nbr_rotate_right()
 					self.__enter_sequence_main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________nbr_forward_default()
 					self.__main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________react(1)
@@ -1463,12 +1456,6 @@ class Model:
 		"""
 		transitioned_after = transitioned_before
 		if not self.__do_completion:
-			if transitioned_after < 1:
-				if (self.imu.old_yaw - (self.imu.yaw if self.imu.yaw > 0 else -self.imu.yaw)) > 175:
-					self.__exit_sequence_main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________nbr_rotate_back()
-					self.__enter_sequence_main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________nbr_forward_default()
-					self.__main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________react(1)
-					transitioned_after = 1
 			#If no transition was taken then execute local reactions
 			if transitioned_after == transitioned_before:
 				transitioned_after = self.__main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________react(transitioned_before)
