@@ -459,6 +459,11 @@ class Model:
 			return self.in_event_queue.get()
 		return None
 	
+	def __entry_action_main_region_manual_mode(self):
+		"""Entry action for state 'Manual Mode'..
+		"""
+		self.grid.update = True
+		
 	def __entry_action_main_region_manual_mode_manual_mode_stopped(self):
 		"""Entry action for state 'stopped'..
 		"""
@@ -489,9 +494,15 @@ class Model:
 		self.output.rotation = self.output.rotation + 0.1
 		self.__completed = True
 		
+	def __entry_action_main_region_autonomous_mode___logging_autonomous_mode_drive_autonomously(self):
+		"""Entry action for state 'Drive autonomously'..
+		"""
+		self.grid.update = True
+		
 	def __enter_sequence_main_region_manual_mode_default(self):
 		"""'default' enter sequence for state Manual Mode.
 		"""
+		self.__entry_action_main_region_manual_mode()
 		self.__enter_sequence_main_region_manual_mode_manual_mode_default()
 		
 	def __enter_sequence_main_region_manual_mode_manual_mode_stopped_default(self):
@@ -543,6 +554,7 @@ class Model:
 	def __enter_sequence_main_region_autonomous_mode___logging_autonomous_mode_drive_autonomously_default(self):
 		"""'default' enter sequence for state Drive autonomously.
 		"""
+		self.__entry_action_main_region_autonomous_mode___logging_autonomous_mode_drive_autonomously()
 		self.__state_vector[0] = self.State.main_region_autonomous_mode___logging_autonomous_mode_drive_autonomously
 		self.__state_conf_vector_position = 0
 		self.__state_conf_vector_changed = True
