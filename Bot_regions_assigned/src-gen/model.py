@@ -22,10 +22,20 @@ class Model:
 			main_region_manual_mode_manual_mode_turning_right,
 			main_region_manual_mode_manual_mode_turning_left,
 			main_region_autonomous_mode___logging,
-			main_region_autonomous_mode___logging_autonomous_mode_drive_autonomously,
+			main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration,
+			main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0creep,
+			main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0calibrated,
+			main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_prepare_calibration,
+			main_region_autonomous_mode___logging_exploration_pre_exploration,
+			main_region_autonomous_mode___logging_exploration_exploration________________________________________________________,
+			main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________region0forward,
 			main_region_autonomous_mode___logging_logging_logging,
+			main_region_autonomous_mode___logging_rotation_calibration_calibrating,
+			main_region_autonomous_mode___logging_rotation_calibration_rotate_left,
+			main_region_autonomous_mode___logging_rotation_calibration_rotate_right,
+			main_region_autonomous_mode___logging_rotation_calibration_no_rotation,
 			null_state
-		) = range(11)
+		) = range(21)
 	
 	
 	class UserVar:
@@ -305,8 +315,8 @@ class Model:
 		# enumeration of all states:
 		self.__State = Model.State
 		self.__state_conf_vector_changed = None
-		self.__state_vector = [None] * 2
-		for __state_index in range(2):
+		self.__state_vector = [None] * 4
+		for __state_index in range(4):
 			self.__state_vector[__state_index] = self.State.null_state
 		
 		# initializations:
@@ -415,7 +425,7 @@ class Model:
 	def is_active(self):
 		"""Checks if the state machine is active.
 		"""
-		return self.__state_vector[0] is not self.__State.null_state or self.__state_vector[1] is not self.__State.null_state
+		return self.__state_vector[0] is not self.__State.null_state or self.__state_vector[1] is not self.__State.null_state or self.__state_vector[2] is not self.__State.null_state or self.__state_vector[3] is not self.__State.null_state
 	
 	def is_final(self):
 		"""Checks if the statemachine is final.
@@ -444,11 +454,33 @@ class Model:
 			return self.__state_vector[0] == self.__State.main_region_manual_mode_manual_mode_turning_left
 		if s == self.__State.main_region_autonomous_mode___logging:
 			return (self.__state_vector[0] >= self.__State.main_region_autonomous_mode___logging)\
-				and (self.__state_vector[0] <= self.__State.main_region_autonomous_mode___logging_logging_logging)
-		if s == self.__State.main_region_autonomous_mode___logging_autonomous_mode_drive_autonomously:
-			return self.__state_vector[0] == self.__State.main_region_autonomous_mode___logging_autonomous_mode_drive_autonomously
+				and (self.__state_vector[0] <= self.__State.main_region_autonomous_mode___logging_rotation_calibration_no_rotation)
+		if s == self.__State.main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration:
+			return (self.__state_vector[0] >= self.__State.main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration)\
+				and (self.__state_vector[0] <= self.__State.main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0calibrated)
+		if s == self.__State.main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0creep:
+			return self.__state_vector[0] == self.__State.main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0creep
+		if s == self.__State.main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0calibrated:
+			return self.__state_vector[0] == self.__State.main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0calibrated
+		if s == self.__State.main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_prepare_calibration:
+			return self.__state_vector[0] == self.__State.main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_prepare_calibration
+		if s == self.__State.main_region_autonomous_mode___logging_exploration_pre_exploration:
+			return self.__state_vector[1] == self.__State.main_region_autonomous_mode___logging_exploration_pre_exploration
+		if s == self.__State.main_region_autonomous_mode___logging_exploration_exploration________________________________________________________:
+			return (self.__state_vector[1] >= self.__State.main_region_autonomous_mode___logging_exploration_exploration________________________________________________________)\
+				and (self.__state_vector[1] <= self.__State.main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________region0forward)
+		if s == self.__State.main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________region0forward:
+			return self.__state_vector[1] == self.__State.main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________region0forward
 		if s == self.__State.main_region_autonomous_mode___logging_logging_logging:
-			return self.__state_vector[1] == self.__State.main_region_autonomous_mode___logging_logging_logging
+			return self.__state_vector[2] == self.__State.main_region_autonomous_mode___logging_logging_logging
+		if s == self.__State.main_region_autonomous_mode___logging_rotation_calibration_calibrating:
+			return self.__state_vector[3] == self.__State.main_region_autonomous_mode___logging_rotation_calibration_calibrating
+		if s == self.__State.main_region_autonomous_mode___logging_rotation_calibration_rotate_left:
+			return self.__state_vector[3] == self.__State.main_region_autonomous_mode___logging_rotation_calibration_rotate_left
+		if s == self.__State.main_region_autonomous_mode___logging_rotation_calibration_rotate_right:
+			return self.__state_vector[3] == self.__State.main_region_autonomous_mode___logging_rotation_calibration_rotate_right
+		if s == self.__State.main_region_autonomous_mode___logging_rotation_calibration_no_rotation:
+			return self.__state_vector[3] == self.__State.main_region_autonomous_mode___logging_rotation_calibration_no_rotation
 		return False
 		
 	def __execute_queued_event(self, func):
@@ -494,10 +526,48 @@ class Model:
 		self.output.rotation = self.output.rotation + 0.1
 		self.__completed = True
 		
-	def __entry_action_main_region_autonomous_mode___logging_autonomous_mode_drive_autonomously(self):
-		"""Entry action for state 'Drive autonomously'..
+	def __entry_action_main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_creep(self):
+		"""Entry action for state 'Creep'..
 		"""
-		self.grid.update = True
+		self.output.speed = 0.05
+		
+	def __entry_action_main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_calibrated(self):
+		"""Entry action for state 'Calibrated'..
+		"""
+		self.user_var.startprocedure = False
+		
+	def __entry_action_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_forward(self):
+		"""Entry action for state 'forward'..
+		"""
+		self.output.speed = 0.04
+		
+	def __entry_action_main_region_autonomous_mode___logging_rotation_calibration_rotate_left(self):
+		""".
+		"""
+		self.output.rotation = self.output.speed
+		self.__completed = True
+		
+	def __entry_action_main_region_autonomous_mode___logging_rotation_calibration_rotate_right(self):
+		""".
+		"""
+		self.output.rotation = -self.output.speed
+		self.__completed = True
+		
+	def __entry_action_main_region_autonomous_mode___logging_rotation_calibration_no_rotation(self):
+		""".
+		"""
+		self.output.rotation = 0.0
+		self.__completed = True
+		
+	def __exit_action_main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration(self):
+		"""Exit action for state 'Calibration'..
+		"""
+		self.user_var.startprocedure = False
+		
+	def __exit_action_main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_creep(self):
+		"""Exit action for state 'Creep'..
+		"""
+		self.output.speed = 0.0
 		
 	def __enter_sequence_main_region_manual_mode_default(self):
 		"""'default' enter sequence for state Manual Mode.
@@ -548,22 +618,95 @@ class Model:
 	def __enter_sequence_main_region_autonomous_mode___logging_default(self):
 		"""'default' enter sequence for state Autonomous Mode + Logging.
 		"""
-		self.__enter_sequence_main_region_autonomous_mode___logging_autonomous_mode_default()
+		self.__enter_sequence_main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_default()
+		self.__enter_sequence_main_region_autonomous_mode___logging_exploration_default()
 		self.__enter_sequence_main_region_autonomous_mode___logging_logging_default()
+		self.__enter_sequence_main_region_autonomous_mode___logging_rotation_calibration_default()
 		
-	def __enter_sequence_main_region_autonomous_mode___logging_autonomous_mode_drive_autonomously_default(self):
-		"""'default' enter sequence for state Drive autonomously.
+	def __enter_sequence_main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_default(self):
+		"""'default' enter sequence for state Calibration.
 		"""
-		self.__entry_action_main_region_autonomous_mode___logging_autonomous_mode_drive_autonomously()
-		self.__state_vector[0] = self.State.main_region_autonomous_mode___logging_autonomous_mode_drive_autonomously
+		self.__enter_sequence_main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_default()
+		
+	def __enter_sequence_main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_creep_default(self):
+		"""'default' enter sequence for state Creep.
+		"""
+		self.__entry_action_main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_creep()
+		self.__state_vector[0] = self.State.main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0creep
 		self.__state_conf_vector_position = 0
+		self.__state_conf_vector_changed = True
+		
+	def __enter_sequence_main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_calibrated_default(self):
+		"""'default' enter sequence for state Calibrated.
+		"""
+		self.__entry_action_main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_calibrated()
+		self.__state_vector[0] = self.State.main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0calibrated
+		self.__state_conf_vector_position = 0
+		self.__state_conf_vector_changed = True
+		
+	def __enter_sequence_main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_prepare_calibration_default(self):
+		"""'default' enter sequence for state prepare calibration.
+		"""
+		self.__state_vector[0] = self.State.main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_prepare_calibration
+		self.__state_conf_vector_position = 0
+		self.__state_conf_vector_changed = True
+		
+	def __enter_sequence_main_region_autonomous_mode___logging_exploration_pre_exploration_default(self):
+		"""'default' enter sequence for state pre exploration.
+		"""
+		self.__state_vector[1] = self.State.main_region_autonomous_mode___logging_exploration_pre_exploration
+		self.__state_conf_vector_position = 1
+		self.__state_conf_vector_changed = True
+		
+	def __enter_sequence_main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________default(self):
+		"""'default' enter sequence for state exploration                                                        .
+		"""
+		self.__enter_sequence_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_default()
+		
+	def __enter_sequence_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_forward_default(self):
+		"""'default' enter sequence for state forward.
+		"""
+		self.__entry_action_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_forward()
+		self.__state_vector[1] = self.State.main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________region0forward
+		self.__state_conf_vector_position = 1
 		self.__state_conf_vector_changed = True
 		
 	def __enter_sequence_main_region_autonomous_mode___logging_logging_logging_default(self):
 		"""'default' enter sequence for state Logging.
 		"""
-		self.__state_vector[1] = self.State.main_region_autonomous_mode___logging_logging_logging
-		self.__state_conf_vector_position = 1
+		self.__state_vector[2] = self.State.main_region_autonomous_mode___logging_logging_logging
+		self.__state_conf_vector_position = 2
+		self.__state_conf_vector_changed = True
+		
+	def __enter_sequence_main_region_autonomous_mode___logging_rotation_calibration_calibrating_default(self):
+		"""'default' enter sequence for state calibrating.
+		"""
+		self.__state_vector[3] = self.State.main_region_autonomous_mode___logging_rotation_calibration_calibrating
+		self.__state_conf_vector_position = 3
+		self.__state_conf_vector_changed = True
+		
+	def __enter_sequence_main_region_autonomous_mode___logging_rotation_calibration_rotate_left_default(self):
+		"""'default' enter sequence for state rotate left.
+		"""
+		self.__entry_action_main_region_autonomous_mode___logging_rotation_calibration_rotate_left()
+		self.__state_vector[3] = self.State.main_region_autonomous_mode___logging_rotation_calibration_rotate_left
+		self.__state_conf_vector_position = 3
+		self.__state_conf_vector_changed = True
+		
+	def __enter_sequence_main_region_autonomous_mode___logging_rotation_calibration_rotate_right_default(self):
+		"""'default' enter sequence for state rotate right.
+		"""
+		self.__entry_action_main_region_autonomous_mode___logging_rotation_calibration_rotate_right()
+		self.__state_vector[3] = self.State.main_region_autonomous_mode___logging_rotation_calibration_rotate_right
+		self.__state_conf_vector_position = 3
+		self.__state_conf_vector_changed = True
+		
+	def __enter_sequence_main_region_autonomous_mode___logging_rotation_calibration_no_rotation_default(self):
+		"""'default' enter sequence for state no rotation.
+		"""
+		self.__entry_action_main_region_autonomous_mode___logging_rotation_calibration_no_rotation()
+		self.__state_vector[3] = self.State.main_region_autonomous_mode___logging_rotation_calibration_no_rotation
+		self.__state_conf_vector_position = 3
 		self.__state_conf_vector_changed = True
 		
 	def __enter_sequence_main_region_default(self):
@@ -576,15 +719,35 @@ class Model:
 		"""
 		self.__react_main_region_manual_mode_manual_mode__entry_default()
 		
-	def __enter_sequence_main_region_autonomous_mode___logging_autonomous_mode_default(self):
-		"""'default' enter sequence for region Autonomous Mode.
+	def __enter_sequence_main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_default(self):
+		"""'default' enter sequence for region Calibration on entry to the maze.
 		"""
-		self.__react_main_region_autonomous_mode___logging_autonomous_mode__entry_default()
+		self.__react_main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze__entry_default()
+		
+	def __enter_sequence_main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_default(self):
+		"""'default' enter sequence for region .
+		"""
+		self.__react_main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0__entry_default()
+		
+	def __enter_sequence_main_region_autonomous_mode___logging_exploration_default(self):
+		"""'default' enter sequence for region Exploration.
+		"""
+		self.__react_main_region_autonomous_mode___logging_exploration__entry_default()
+		
+	def __enter_sequence_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_default(self):
+		"""'default' enter sequence for region .
+		"""
+		self.__react_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0__entry_default()
 		
 	def __enter_sequence_main_region_autonomous_mode___logging_logging_default(self):
 		"""'default' enter sequence for region Logging.
 		"""
 		self.__react_main_region_autonomous_mode___logging_logging__entry_default()
+		
+	def __enter_sequence_main_region_autonomous_mode___logging_rotation_calibration_default(self):
+		"""'default' enter sequence for region RotationCalibration.
+		"""
+		self.__react_main_region_autonomous_mode___logging_rotation_calibration__entry_default()
 		
 	def __exit_sequence_main_region_manual_mode(self):
 		"""Default exit sequence for state Manual Mode.
@@ -630,20 +793,71 @@ class Model:
 	def __exit_sequence_main_region_autonomous_mode___logging(self):
 		"""Default exit sequence for state Autonomous Mode + Logging.
 		"""
-		self.__exit_sequence_main_region_autonomous_mode___logging_autonomous_mode()
+		self.__exit_sequence_main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze()
+		self.__exit_sequence_main_region_autonomous_mode___logging_exploration()
 		self.__exit_sequence_main_region_autonomous_mode___logging_logging()
+		self.__exit_sequence_main_region_autonomous_mode___logging_rotation_calibration()
 		
-	def __exit_sequence_main_region_autonomous_mode___logging_autonomous_mode_drive_autonomously(self):
-		"""Default exit sequence for state Drive autonomously.
+	def __exit_sequence_main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_creep(self):
+		"""Default exit sequence for state Creep.
+		"""
+		self.__state_vector[0] = self.State.null_state
+		self.__state_conf_vector_position = 0
+		self.__exit_action_main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_creep()
+		
+	def __exit_sequence_main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_calibrated(self):
+		"""Default exit sequence for state Calibrated.
 		"""
 		self.__state_vector[0] = self.State.null_state
 		self.__state_conf_vector_position = 0
 		
-	def __exit_sequence_main_region_autonomous_mode___logging_logging_logging(self):
-		"""Default exit sequence for state Logging.
+	def __exit_sequence_main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_prepare_calibration(self):
+		"""Default exit sequence for state prepare calibration.
+		"""
+		self.__state_vector[0] = self.State.null_state
+		self.__state_conf_vector_position = 0
+		
+	def __exit_sequence_main_region_autonomous_mode___logging_exploration_pre_exploration(self):
+		"""Default exit sequence for state pre exploration.
 		"""
 		self.__state_vector[1] = self.State.null_state
 		self.__state_conf_vector_position = 1
+		
+	def __exit_sequence_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_forward(self):
+		"""Default exit sequence for state forward.
+		"""
+		self.__state_vector[1] = self.State.null_state
+		self.__state_conf_vector_position = 1
+		
+	def __exit_sequence_main_region_autonomous_mode___logging_logging_logging(self):
+		"""Default exit sequence for state Logging.
+		"""
+		self.__state_vector[2] = self.State.null_state
+		self.__state_conf_vector_position = 2
+		
+	def __exit_sequence_main_region_autonomous_mode___logging_rotation_calibration_calibrating(self):
+		"""Default exit sequence for state calibrating.
+		"""
+		self.__state_vector[3] = self.State.null_state
+		self.__state_conf_vector_position = 3
+		
+	def __exit_sequence_main_region_autonomous_mode___logging_rotation_calibration_rotate_left(self):
+		"""Default exit sequence for state rotate left.
+		"""
+		self.__state_vector[3] = self.State.null_state
+		self.__state_conf_vector_position = 3
+		
+	def __exit_sequence_main_region_autonomous_mode___logging_rotation_calibration_rotate_right(self):
+		"""Default exit sequence for state rotate right.
+		"""
+		self.__state_vector[3] = self.State.null_state
+		self.__state_conf_vector_position = 3
+		
+	def __exit_sequence_main_region_autonomous_mode___logging_rotation_calibration_no_rotation(self):
+		"""Default exit sequence for state no rotation.
+		"""
+		self.__state_vector[3] = self.State.null_state
+		self.__state_conf_vector_position = 3
 		
 	def __exit_sequence_main_region(self):
 		"""Default exit sequence for region main region.
@@ -661,11 +875,31 @@ class Model:
 			self.__exit_sequence_main_region_manual_mode_manual_mode_turning_right()
 		elif state == self.State.main_region_manual_mode_manual_mode_turning_left:
 			self.__exit_sequence_main_region_manual_mode_manual_mode_turning_left()
-		elif state == self.State.main_region_autonomous_mode___logging_autonomous_mode_drive_autonomously:
-			self.__exit_sequence_main_region_autonomous_mode___logging_autonomous_mode_drive_autonomously()
+		elif state == self.State.main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0creep:
+			self.__exit_sequence_main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_creep()
+			self.__exit_action_main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration()
+		elif state == self.State.main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0calibrated:
+			self.__exit_sequence_main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_calibrated()
+			self.__exit_action_main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration()
+		elif state == self.State.main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_prepare_calibration:
+			self.__exit_sequence_main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_prepare_calibration()
 		state = self.__state_vector[1]
+		if state == self.State.main_region_autonomous_mode___logging_exploration_pre_exploration:
+			self.__exit_sequence_main_region_autonomous_mode___logging_exploration_pre_exploration()
+		elif state == self.State.main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________region0forward:
+			self.__exit_sequence_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_forward()
+		state = self.__state_vector[2]
 		if state == self.State.main_region_autonomous_mode___logging_logging_logging:
 			self.__exit_sequence_main_region_autonomous_mode___logging_logging_logging()
+		state = self.__state_vector[3]
+		if state == self.State.main_region_autonomous_mode___logging_rotation_calibration_calibrating:
+			self.__exit_sequence_main_region_autonomous_mode___logging_rotation_calibration_calibrating()
+		elif state == self.State.main_region_autonomous_mode___logging_rotation_calibration_rotate_left:
+			self.__exit_sequence_main_region_autonomous_mode___logging_rotation_calibration_rotate_left()
+		elif state == self.State.main_region_autonomous_mode___logging_rotation_calibration_rotate_right:
+			self.__exit_sequence_main_region_autonomous_mode___logging_rotation_calibration_rotate_right()
+		elif state == self.State.main_region_autonomous_mode___logging_rotation_calibration_no_rotation:
+			self.__exit_sequence_main_region_autonomous_mode___logging_rotation_calibration_no_rotation()
 		
 	def __exit_sequence_main_region_manual_mode_manual_mode(self):
 		"""Default exit sequence for region Manual Mode.
@@ -684,34 +918,92 @@ class Model:
 		elif state == self.State.main_region_manual_mode_manual_mode_turning_left:
 			self.__exit_sequence_main_region_manual_mode_manual_mode_turning_left()
 		
-	def __exit_sequence_main_region_autonomous_mode___logging_autonomous_mode(self):
-		"""Default exit sequence for region Autonomous Mode.
+	def __exit_sequence_main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze(self):
+		"""Default exit sequence for region Calibration on entry to the maze.
 		"""
 		state = self.__state_vector[0]
-		if state == self.State.main_region_autonomous_mode___logging_autonomous_mode_drive_autonomously:
-			self.__exit_sequence_main_region_autonomous_mode___logging_autonomous_mode_drive_autonomously()
+		if state == self.State.main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0creep:
+			self.__exit_sequence_main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_creep()
+			self.__exit_action_main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration()
+		elif state == self.State.main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0calibrated:
+			self.__exit_sequence_main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_calibrated()
+			self.__exit_action_main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration()
+		elif state == self.State.main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_prepare_calibration:
+			self.__exit_sequence_main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_prepare_calibration()
+		
+	def __exit_sequence_main_region_autonomous_mode___logging_exploration(self):
+		"""Default exit sequence for region Exploration.
+		"""
+		state = self.__state_vector[1]
+		if state == self.State.main_region_autonomous_mode___logging_exploration_pre_exploration:
+			self.__exit_sequence_main_region_autonomous_mode___logging_exploration_pre_exploration()
+		elif state == self.State.main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________region0forward:
+			self.__exit_sequence_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_forward()
 		
 	def __exit_sequence_main_region_autonomous_mode___logging_logging(self):
 		"""Default exit sequence for region Logging.
 		"""
-		state = self.__state_vector[1]
+		state = self.__state_vector[2]
 		if state == self.State.main_region_autonomous_mode___logging_logging_logging:
 			self.__exit_sequence_main_region_autonomous_mode___logging_logging_logging()
+		
+	def __exit_sequence_main_region_autonomous_mode___logging_rotation_calibration(self):
+		"""Default exit sequence for region RotationCalibration.
+		"""
+		state = self.__state_vector[3]
+		if state == self.State.main_region_autonomous_mode___logging_rotation_calibration_calibrating:
+			self.__exit_sequence_main_region_autonomous_mode___logging_rotation_calibration_calibrating()
+		elif state == self.State.main_region_autonomous_mode___logging_rotation_calibration_rotate_left:
+			self.__exit_sequence_main_region_autonomous_mode___logging_rotation_calibration_rotate_left()
+		elif state == self.State.main_region_autonomous_mode___logging_rotation_calibration_rotate_right:
+			self.__exit_sequence_main_region_autonomous_mode___logging_rotation_calibration_rotate_right()
+		elif state == self.State.main_region_autonomous_mode___logging_rotation_calibration_no_rotation:
+			self.__exit_sequence_main_region_autonomous_mode___logging_rotation_calibration_no_rotation()
+		
+	def __react_main_region_autonomous_mode___logging_rotation_calibration__choice_0(self):
+		"""The reactions of state null..
+		"""
+		if (self.imu.yaw > 0.0 and self.imu.yaw < 45.0) or (self.imu.yaw > -90.0 and self.imu.yaw < -45.0) or (self.imu.yaw > -180 and self.imu.yaw < -135.0) or (self.imu.yaw > 90.0 and self.imu.yaw < 135.0):
+			self.__enter_sequence_main_region_autonomous_mode___logging_rotation_calibration_rotate_right_default()
+		elif (self.imu.yaw > -45.0 and self.imu.yaw < 0.0) or (self.imu.yaw > -135.0 and self.imu.yaw < -90.0) or (self.imu.yaw > 135.0 and self.imu.yaw < -180.0) or (self.imu.yaw > 45.0 and self.imu.yaw < 90.0):
+			self.__enter_sequence_main_region_autonomous_mode___logging_rotation_calibration_rotate_left_default()
+		else:
+			self.__enter_sequence_main_region_autonomous_mode___logging_rotation_calibration_no_rotation_default()
 		
 	def __react_main_region_manual_mode_manual_mode__entry_default(self):
 		"""Default react sequence for initial entry .
 		"""
 		self.__enter_sequence_main_region_manual_mode_manual_mode_stopped_default()
 		
-	def __react_main_region_autonomous_mode___logging_autonomous_mode__entry_default(self):
+	def __react_main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0__entry_default(self):
 		"""Default react sequence for initial entry .
 		"""
-		self.__enter_sequence_main_region_autonomous_mode___logging_autonomous_mode_drive_autonomously_default()
+		self.__enter_sequence_main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_creep_default()
+		
+	def __react_main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze__entry_default(self):
+		"""Default react sequence for initial entry .
+		"""
+		self.__enter_sequence_main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_prepare_calibration_default()
+		
+	def __react_main_region_autonomous_mode___logging_exploration__entry_default(self):
+		"""Default react sequence for initial entry .
+		"""
+		self.__enter_sequence_main_region_autonomous_mode___logging_exploration_pre_exploration_default()
+		
+	def __react_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0__entry_default(self):
+		"""Default react sequence for initial entry .
+		"""
+		self.__enter_sequence_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_forward_default()
 		
 	def __react_main_region_autonomous_mode___logging_logging__entry_default(self):
 		"""Default react sequence for initial entry .
 		"""
 		self.__enter_sequence_main_region_autonomous_mode___logging_logging_logging_default()
+		
+	def __react_main_region_autonomous_mode___logging_rotation_calibration__entry_default(self):
+		"""Default react sequence for initial entry .
+		"""
+		self.__enter_sequence_main_region_autonomous_mode___logging_rotation_calibration_calibrating_default()
 		
 	def __react_main_region__entry_default(self):
 		"""Default react sequence for initial entry .
@@ -892,17 +1184,89 @@ class Model:
 					self.__exit_sequence_main_region_autonomous_mode___logging()
 					self.__enter_sequence_main_region_manual_mode_default()
 					self.__react(0)
-					transitioned_after = 1
+					transitioned_after = 3
 			#If no transition was taken then execute local reactions
 			if transitioned_after == transitioned_before:
 				transitioned_after = self.__react(transitioned_before)
 		return transitioned_after
 	
 	
-	def __main_region_autonomous_mode___logging_autonomous_mode_drive_autonomously_react(self, transitioned_before):
-		"""Implementation of __main_region_autonomous_mode___logging_autonomous_mode_drive_autonomously_react function.
+	def __main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_react(self, transitioned_before):
+		"""Implementation of __main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_react function.
 		"""
 		transitioned_after = transitioned_before
+		return transitioned_after
+	
+	
+	def __main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_creep_react(self, transitioned_before):
+		"""Implementation of __main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_creep_react function.
+		"""
+		transitioned_after = transitioned_before
+		if not self.__do_completion:
+			if transitioned_after < 0:
+				if self.laser_distance.d90 < 0.5 and self.laser_distance.dm90 < 0.5:
+					self.__exit_sequence_main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_creep()
+					self.__enter_sequence_main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_calibrated_default()
+					self.__main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_react(0)
+					transitioned_after = 0
+			#If no transition was taken then execute local reactions
+			if transitioned_after == transitioned_before:
+				transitioned_after = self.__main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_react(transitioned_before)
+		return transitioned_after
+	
+	
+	def __main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_calibrated_react(self, transitioned_before):
+		"""Implementation of __main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_calibrated_react function.
+		"""
+		transitioned_after = transitioned_before
+		if not self.__do_completion:
+			#If no transition was taken then execute local reactions
+			if transitioned_after == transitioned_before:
+				transitioned_after = self.__main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_react(transitioned_before)
+		return transitioned_after
+	
+	
+	def __main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_prepare_calibration_react(self, transitioned_before):
+		"""Implementation of __main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_prepare_calibration_react function.
+		"""
+		transitioned_after = transitioned_before
+		if not self.__do_completion:
+			if transitioned_after < 0:
+				if self.user_var.startprocedure:
+					self.__exit_sequence_main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_prepare_calibration()
+					self.__enter_sequence_main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_default()
+					transitioned_after = 0
+		return transitioned_after
+	
+	
+	def __main_region_autonomous_mode___logging_exploration_pre_exploration_react(self, transitioned_before):
+		"""Implementation of __main_region_autonomous_mode___logging_exploration_pre_exploration_react function.
+		"""
+		transitioned_after = transitioned_before
+		if not self.__do_completion:
+			if transitioned_after < 1:
+				if not self.user_var.startprocedure:
+					self.__exit_sequence_main_region_autonomous_mode___logging_exploration_pre_exploration()
+					self.__enter_sequence_main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________default()
+					transitioned_after = 1
+		return transitioned_after
+	
+	
+	def __main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________react(self, transitioned_before):
+		"""Implementation of __main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________react function.
+		"""
+		transitioned_after = transitioned_before
+		return transitioned_after
+	
+	
+	def __main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_forward_react(self, transitioned_before):
+		"""Implementation of __main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_forward_react function.
+		"""
+		transitioned_after = transitioned_before
+		if not self.__do_completion:
+			#If no transition was taken then execute local reactions
+			if transitioned_after == transitioned_before:
+				transitioned_after = self.__main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________react(transitioned_before)
 		return transitioned_after
 	
 	
@@ -910,7 +1274,73 @@ class Model:
 		"""Implementation of __main_region_autonomous_mode___logging_logging_logging_react function.
 		"""
 		transitioned_after = transitioned_before
+		return transitioned_after
+	
+	
+	def __main_region_autonomous_mode___logging_rotation_calibration_calibrating_react(self, transitioned_before):
+		"""Implementation of __main_region_autonomous_mode___logging_rotation_calibration_calibrating_react function.
+		"""
+		transitioned_after = transitioned_before
 		if not self.__do_completion:
+			if transitioned_after < 3:
+				if self.output.speed > 0 and not self.user_var.startprocedure:
+					self.__exit_sequence_main_region_autonomous_mode___logging_rotation_calibration_calibrating()
+					self.__react_main_region_autonomous_mode___logging_rotation_calibration__choice_0()
+					transitioned_after = 3
+			#If no transition was taken then execute local reactions
+			if transitioned_after == transitioned_before:
+				transitioned_after = self.__main_region_autonomous_mode___logging_react(transitioned_before)
+		return transitioned_after
+	
+	
+	def __main_region_autonomous_mode___logging_rotation_calibration_rotate_left_react(self, transitioned_before):
+		"""Implementation of __main_region_autonomous_mode___logging_rotation_calibration_rotate_left_react function.
+		"""
+		transitioned_after = transitioned_before
+		if self.__do_completion:
+			self.__state_vector[3] = self.State.null_state
+			self.__state_conf_vector_position = 3
+			self.__state_vector[3] = self.State.main_region_autonomous_mode___logging_rotation_calibration_calibrating
+			self.__state_conf_vector_position = 3
+			self.__state_conf_vector_changed = True
+			self.__main_region_autonomous_mode___logging_react(0)
+		else:
+			#If no transition was taken then execute local reactions
+			if transitioned_after == transitioned_before:
+				transitioned_after = self.__main_region_autonomous_mode___logging_react(transitioned_before)
+		return transitioned_after
+	
+	
+	def __main_region_autonomous_mode___logging_rotation_calibration_rotate_right_react(self, transitioned_before):
+		"""Implementation of __main_region_autonomous_mode___logging_rotation_calibration_rotate_right_react function.
+		"""
+		transitioned_after = transitioned_before
+		if self.__do_completion:
+			self.__state_vector[3] = self.State.null_state
+			self.__state_conf_vector_position = 3
+			self.__state_vector[3] = self.State.main_region_autonomous_mode___logging_rotation_calibration_calibrating
+			self.__state_conf_vector_position = 3
+			self.__state_conf_vector_changed = True
+			self.__main_region_autonomous_mode___logging_react(0)
+		else:
+			#If no transition was taken then execute local reactions
+			if transitioned_after == transitioned_before:
+				transitioned_after = self.__main_region_autonomous_mode___logging_react(transitioned_before)
+		return transitioned_after
+	
+	
+	def __main_region_autonomous_mode___logging_rotation_calibration_no_rotation_react(self, transitioned_before):
+		"""Implementation of __main_region_autonomous_mode___logging_rotation_calibration_no_rotation_react function.
+		"""
+		transitioned_after = transitioned_before
+		if self.__do_completion:
+			self.__state_vector[3] = self.State.null_state
+			self.__state_conf_vector_position = 3
+			self.__state_vector[3] = self.State.main_region_autonomous_mode___logging_rotation_calibration_calibrating
+			self.__state_conf_vector_position = 3
+			self.__state_conf_vector_changed = True
+			self.__main_region_autonomous_mode___logging_react(0)
+		else:
 			#If no transition was taken then execute local reactions
 			if transitioned_after == transitioned_before:
 				transitioned_after = self.__main_region_autonomous_mode___logging_react(transitioned_before)
@@ -946,12 +1376,32 @@ class Model:
 			transitioned = self.__main_region_manual_mode_manual_mode_turning_right_react(transitioned)
 		elif state == self.State.main_region_manual_mode_manual_mode_turning_left:
 			transitioned = self.__main_region_manual_mode_manual_mode_turning_left_react(transitioned)
-		elif state == self.State.main_region_autonomous_mode___logging_autonomous_mode_drive_autonomously:
-			transitioned = self.__main_region_autonomous_mode___logging_autonomous_mode_drive_autonomously_react(transitioned)
+		elif state == self.State.main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0creep:
+			transitioned = self.__main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_creep_react(transitioned)
+		elif state == self.State.main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0calibrated:
+			transitioned = self.__main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_calibrated_react(transitioned)
+		elif state == self.State.main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_prepare_calibration:
+			transitioned = self.__main_region_autonomous_mode___logging_calibration_on_entry_to_the_maze_prepare_calibration_react(transitioned)
 		if self.__state_conf_vector_position < 1:
 			state = self.__state_vector[1]
+			if state == self.State.main_region_autonomous_mode___logging_exploration_pre_exploration:
+				transitioned = self.__main_region_autonomous_mode___logging_exploration_pre_exploration_react(transitioned)
+			elif state == self.State.main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________region0forward:
+				transitioned = self.__main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_forward_react(transitioned)
+		if self.__state_conf_vector_position < 2:
+			state = self.__state_vector[2]
 			if state == self.State.main_region_autonomous_mode___logging_logging_logging:
-				self.__main_region_autonomous_mode___logging_logging_logging_react(transitioned)
+				transitioned = self.__main_region_autonomous_mode___logging_logging_logging_react(transitioned)
+		if self.__state_conf_vector_position < 3:
+			state = self.__state_vector[3]
+			if state == self.State.main_region_autonomous_mode___logging_rotation_calibration_calibrating:
+				self.__main_region_autonomous_mode___logging_rotation_calibration_calibrating_react(transitioned)
+			elif state == self.State.main_region_autonomous_mode___logging_rotation_calibration_rotate_left:
+				self.__main_region_autonomous_mode___logging_rotation_calibration_rotate_left_react(transitioned)
+			elif state == self.State.main_region_autonomous_mode___logging_rotation_calibration_rotate_right:
+				self.__main_region_autonomous_mode___logging_rotation_calibration_rotate_right_react(transitioned)
+			elif state == self.State.main_region_autonomous_mode___logging_rotation_calibration_no_rotation:
+				self.__main_region_autonomous_mode___logging_rotation_calibration_no_rotation_react(transitioned)
 	
 	
 	def run_cycle(self):
