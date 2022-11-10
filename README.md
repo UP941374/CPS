@@ -5,6 +5,8 @@ Below you will find some useful links and notes.
 ## PROJECT ORGANISATION
 [KANBAN Board](https://github.com/users/UP941374/projects/3)
 
+[OVERLEAF](https://www.overleaf.com/project/6368139c02f9acd4a3eb85df)
+
 [Assignment PDF (MAZE TURTLE)](https://github.com/UP941374/CPS/blob/main/PDFs/MazeTurtle.pdf)
 
 [Course organisation](https://github.com/UP941374/CPS/blob/main/PDFs/CPS_Course_Organization.pdf)
