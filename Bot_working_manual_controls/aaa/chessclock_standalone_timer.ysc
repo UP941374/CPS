@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.2/notation" xmlns:sgraph="http://www.yakindu.org/sct/sgraph/2.0.0">
-  <sgraph:Statechart xmi:id="_l-UQAGW5Ee2Az-hehn5Afg" specification="// Use the event driven execution model.&#xA;// Switch to cycle based behavior&#xA;// by specifying '@CycleBased(200)'.&#xA;@EventDriven&#xA;&#xA;// Use @SuperSteps(yes) to enable&#xA;// super step semantics.&#xA;@SuperSteps(no)&#xA;&#xA;interface:&#xA;&#x9;out event whiteMoves&#xA;&#x9;out event blackMoves&#xA;&#x9;&#xA;&#x9;in event whiteTurn&#xA;&#x9;in event blackTurn&#xA;&#x9;&#xA;&#x9;in event tick&#xA;&#x9;&#xA;&#x9;in event whiteWin&#xA;&#x9;in event blackWin&#xA;&#x9;&#xA;&#x9;var blackTimeGlobal:integer&#xA;&#x9;var whiteTimeGlobal:integer&#xA;&#x9;var blackTimeLocal:integer&#xA;&#x9;var whiteTimeLocal:integer&#xA;&#x9;&#xA;&#x9;var black:boolean&#xA;&#x9;var white:boolean&#xA;&#x9;&#xA;&#x9;var turns:integer&#xA;&#x9;&#xA;&#x9;//CONFIG VARS&#xA;&#x9;//global time increment (15)&#xA;&#x9;var _GTI:integer = 15&#xA;&#x9;//turn time (10)&#xA;&#x9;var _TT:integer = 10&#xA;&#x9;//global time (1800)&#xA;&#x9;var _GT:integer = 1800&#xA;&#x9;//extra time rounds (40)&#xA;&#x9;var _ETR:integer = 40&#xA;&#x9;//extra time increment (900)&#xA;&#x9;var _ETI:integer = 900" name="chessclock">
+  <sgraph:Statechart xmi:id="_l-UQAGW5Ee2Az-hehn5Afg" specification="// Use the event driven execution model.&#xA;// Switch to cycle based behavior&#xA;// by specifying '@CycleBased(200)'.&#xA;@EventDriven&#xA;&#xA;// Use @SuperSteps(yes) to enable&#xA;// super step semantics.&#xA;@SuperSteps(no)&#xA;&#xA;interface:&#xA;&#x9;out event whiteMoves&#xA;&#x9;out event blackMoves&#xA;&#x9;&#xA;&#x9;in event whiteTurn&#xA;&#x9;in event blackTurn&#xA;&#x9;&#xA;&#x9;in event tick&#xA;&#x9;&#xA;&#x9;in event whiteWin&#xA;&#x9;in event blackWin&#xA;&#x9;&#xA;&#x9;var blackTimeGlobal:integer&#xA;&#x9;var whiteTimeGlobal:integer&#xA;&#x9;var blackTimeLocal:integer&#xA;&#x9;var whiteTimeLocal:integer&#xA;&#x9;&#xA;&#x9;var black:boolean&#xA;&#x9;var white:boolean&#xA;&#x9;&#xA;&#x9;var turns:integer&#xA;&#x9;&#xA;&#x9;//CONFIG VARS&#xA;&#x9;//global time increment (15)&#xA;&#x9;var _GTI:integer = 15&#xA;&#x9;//turn time (10)&#xA;&#x9;var _TT:integer = 10&#xA;&#x9;//global time (1800)&#xA;&#x9;var _GT:integer = 5&#xA;&#x9;//extra time rounds (40)&#xA;&#x9;var _ETR:integer = 40&#xA;&#x9;//extra time increment (900)&#xA;&#x9;var _ETI:integer = 900" name="chessclock">
     <regions xmi:id="_l-a9s2W5Ee2Az-hehn5Afg" name="chessclock">
       <vertices xsi:type="sgraph:State" xmi:id="_nxQ0UGW5Ee2Az-hehn5Afg" name="chessclock" incomingTransitions="_N5E44GW6Ee2Az-hehn5Afg">
         <regions xmi:id="_nxTQkGW5Ee2Az-hehn5Afg" name="display">
@@ -274,7 +274,7 @@
                   </children>
                   <styles xsi:type="notation:ShapeStyle" xmi:id="_9JMJTGW7Ee2Az-hehn5Afg" fontName="Verdana" fillColor="0" lineColor="16777215"/>
                   <styles xsi:type="notation:NamedStyle" xmi:id="_9JMJTWW7Ee2Az-hehn5Afg" name="allowColors"/>
-                  <layoutConstraint xsi:type="notation:Bounds" xmi:id="_9JMJTmW7Ee2Az-hehn5Afg" x="27" y="7" width="15" height="15"/>
+                  <layoutConstraint xsi:type="notation:Bounds" xmi:id="_9JMJTmW7Ee2Az-hehn5Afg" x="35" y="60"/>
                 </children>
                 <children xmi:id="_9JMJT2W7Ee2Az-hehn5Afg" type="State" element="__qBZMGW5Ee2Az-hehn5Afg">
                   <children xsi:type="notation:DecorationNode" xmi:id="_9JMJUGW7Ee2Az-hehn5Afg" type="StateName">
@@ -374,7 +374,7 @@
           <styles xsi:type="notation:ShapeStyle" xmi:id="_nxW68WW5Ee2Az-hehn5Afg" fontName="Verdana" fillColor="15720400" lineColor="12632256"/>
           <styles xsi:type="notation:FontStyle" xmi:id="_nxW68mW5Ee2Az-hehn5Afg"/>
           <styles xsi:type="notation:BooleanValueStyle" xmi:id="_nxZXM2W5Ee2Az-hehn5Afg" name="isHorizontal" booleanValue="true"/>
-          <layoutConstraint xsi:type="notation:Bounds" xmi:id="_nxW682W5Ee2Az-hehn5Afg" y="20" width="1278" height="617"/>
+          <layoutConstraint xsi:type="notation:Bounds" xmi:id="_nxW682W5Ee2Az-hehn5Afg" y="20" width="1275" height="614"/>
         </children>
         <children xmi:id="_INPXcGW6Ee2Az-hehn5Afg" type="Entry" element="_INM7MGW6Ee2Az-hehn5Afg">
           <children xmi:id="_INP-gGW6Ee2Az-hehn5Afg" type="BorderItemLabelContainer">
@@ -549,11 +549,11 @@
     <edges xmi:id="_BSXQAGW6Ee2Az-hehn5Afg" type="Transition" element="_BSTloGW6Ee2Az-hehn5Afg" source="_9JMJRWW7Ee2Az-hehn5Afg" target="_9JMJT2W7Ee2Az-hehn5Afg">
       <children xsi:type="notation:DecorationNode" xmi:id="_BSX3EWW6Ee2Az-hehn5Afg" type="TransitionExpression">
         <styles xsi:type="notation:ShapeStyle" xmi:id="_BSX3EmW6Ee2Az-hehn5Afg"/>
-        <layoutConstraint xsi:type="notation:Location" xmi:id="_BSX3E2W6Ee2Az-hehn5Afg" x="9" y="54"/>
+        <layoutConstraint xsi:type="notation:Location" xmi:id="_BSX3E2W6Ee2Az-hehn5Afg" x="-67" y="8"/>
       </children>
       <styles xsi:type="notation:ConnectorStyle" xmi:id="_BSXQAWW6Ee2Az-hehn5Afg" routing="Rectilinear" lineColor="4210752"/>
       <styles xsi:type="notation:FontStyle" xmi:id="_BSX3EGW6Ee2Az-hehn5Afg" fontName="Verdana"/>
-      <bendpoints xsi:type="notation:RelativeBendpoints" xmi:id="_BSXQAmW6Ee2Az-hehn5Afg" points="[7, 0, -222, -13]$[209, 0, -20, -13]"/>
+      <bendpoints xsi:type="notation:RelativeBendpoints" xmi:id="_BSXQAmW6Ee2Az-hehn5Afg" points="[6, 2, -217, -17]$[203, 2, -20, -17]"/>
     </edges>
     <edges xmi:id="_N5GuEGW6Ee2Az-hehn5Afg" type="Transition" element="_N5E44GW6Ee2Az-hehn5Afg" source="_INPXcGW6Ee2Az-hehn5Afg" target="_nxW68GW5Ee2Az-hehn5Afg">
       <children xsi:type="notation:DecorationNode" xmi:id="_N5HVIGW6Ee2Az-hehn5Afg" type="TransitionExpression">
