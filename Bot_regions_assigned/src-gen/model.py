@@ -78,6 +78,11 @@ class Model:
 			self.oldx = None
 			self.oldy = None
 			self.turned = None
+			self.rotate_speed = None
+			self.forward_speed = None
+			self.front_laser_distance = None
+			self.left_laser_distance = None
+			self.calibration_speed = None
 			
 			self.statemachine = statemachine
 		
@@ -362,6 +367,11 @@ class Model:
 		self.user_var.oldx = 0
 		self.user_var.oldy = 0
 		self.user_var.turned = False
+		self.user_var.rotate_speed = 0.5
+		self.user_var.forward_speed = 0.15
+		self.user_var.front_laser_distance = 0.3
+		self.user_var.left_laser_distance = 0.3
+		self.user_var.calibration_speed = 0.1
 		self.base_values.max_speed = 0.5
 		self.base_values.max_rotation = 2.84
 		self.base_values.degrees_front = 10
@@ -607,7 +617,7 @@ class Model:
 	def __entry_action_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_forward(self):
 		"""Entry action for state 'forward'..
 		"""
-		self.output.speed = 0.15
+		self.output.speed = self.user_var.forward_speed
 		self.user_var.straighten = True
 		
 	def __entry_action_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_stop_before_right(self):
@@ -620,42 +630,42 @@ class Model:
 	def __entry_action_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_south_to_west(self):
 		"""Entry action for state 'SouthToWest'..
 		"""
-		self.output.rotation = -0.53
+		self.output.rotation = -self.user_var.rotate_speed
 		
 	def __entry_action_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_east_to_south(self):
 		"""Entry action for state 'EastToSouth'..
 		"""
-		self.output.rotation = -0.52
+		self.output.rotation = -self.user_var.rotate_speed
 		
 	def __entry_action_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_west_to_north(self):
 		"""Entry action for state 'WestToNorth'..
 		"""
-		self.output.rotation = -0.54
+		self.output.rotation = -self.user_var.rotate_speed
 		
 	def __entry_action_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_north_to_east(self):
 		"""Entry action for state 'NorthToEast'..
 		"""
-		self.output.rotation = -0.51
+		self.output.rotation = -self.user_var.rotate_speed
 		
 	def __entry_action_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_north_to_west(self):
 		"""Entry action for state 'NorthToWest'..
 		"""
-		self.output.rotation = 0.47
+		self.output.rotation = self.user_var.rotate_speed
 		
 	def __entry_action_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_east_to_north(self):
 		"""Entry action for state 'EastToNorth'..
 		"""
-		self.output.rotation = 0.48
+		self.output.rotation = self.user_var.rotate_speed
 		
 	def __entry_action_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_south_to_east(self):
 		"""Entry action for state 'SouthToEast'..
 		"""
-		self.output.rotation = 0.44
+		self.output.rotation = self.user_var.rotate_speed
 		
 	def __entry_action_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_west_to_south(self):
 		"""Entry action for state 'WestToSouth'..
 		"""
-		self.output.rotation = 0.46
+		self.output.rotation = self.user_var.rotate_speed
 		
 	def __entry_action_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_left_clear(self):
 		""".
@@ -670,43 +680,43 @@ class Model:
 	def __entry_action_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_go_east(self):
 		"""Entry action for state 'goEast'..
 		"""
-		self.timer_service.set_timer(self, 0, (2 * 1000), False)
-		self.output.speed = 0.07
+		self.timer_service.set_timer(self, 0, (1 * 1000), False)
+		self.output.speed = self.user_var.forward_speed
 		
 	def __entry_action_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_go_north(self):
 		"""Entry action for state 'goNorth'..
 		"""
-		self.timer_service.set_timer(self, 1, (2 * 1000), False)
-		self.output.speed = 0.07
+		self.timer_service.set_timer(self, 1, (1 * 1000), False)
+		self.output.speed = self.user_var.forward_speed
 		
 	def __entry_action_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_go_west(self):
 		"""Entry action for state 'goWest'..
 		"""
-		self.timer_service.set_timer(self, 2, (2 * 1000), False)
-		self.output.speed = 0.07
+		self.timer_service.set_timer(self, 2, (1 * 1000), False)
+		self.output.speed = self.user_var.forward_speed
 		
 	def __entry_action_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_go_south(self):
 		"""Entry action for state 'goSouth'..
 		"""
-		self.timer_service.set_timer(self, 3, (2 * 1000), False)
-		self.output.speed = 0.05
+		self.timer_service.set_timer(self, 3, (1 * 1000), False)
+		self.output.speed = self.user_var.forward_speed
 		
 	def __entry_action_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_froward_after_left(self):
 		"""Entry action for state 'frowardAfterLeft'..
 		"""
-		self.timer_service.set_timer(self, 4, (3 * 1000), False)
-		self.output.speed = 0.13
+		self.timer_service.set_timer(self, 4, (2 * 1000), False)
+		self.output.speed = self.user_var.forward_speed
 		
 	def __entry_action_main_region_autonomous_mode___logging_rotation_calibration_rotate_left(self):
 		""".
 		"""
-		self.output.rotation = self.output.speed
+		self.output.rotation = self.user_var.calibration_speed
 		self.__completed = True
 		
 	def __entry_action_main_region_autonomous_mode___logging_rotation_calibration_rotate_right(self):
 		""".
 		"""
-		self.output.rotation = -self.output.speed
+		self.output.rotation = -self.user_var.calibration_speed
 		self.__completed = True
 		
 	def __entry_action_main_region_autonomous_mode___logging_rotation_calibration_no_rotation(self):
@@ -1740,11 +1750,11 @@ class Model:
 		transitioned_after = self.__main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________react(transitioned_before)
 		if not self.__do_completion:
 			if transitioned_after < 1:
-				if self.laser_distance.d90 > 0.35 and not self.user_var.turned:
+				if self.laser_distance.d90 > self.user_var.left_laser_distance and not self.user_var.turned:
 					self.__exit_sequence_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_forward()
 					self.__enter_sequence_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_left_clear_default()
 					transitioned_after = 1
-				elif self.laser_distance.d0 < 0.3:
+				elif self.laser_distance.d0 < self.user_var.front_laser_distance:
 					self.__exit_sequence_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_forward()
 					self.__enter_sequence_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_stop_before_right_default()
 					transitioned_after = 1
