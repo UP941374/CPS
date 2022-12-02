@@ -31,6 +31,11 @@ Below you will find some useful links and notes.
 `env | grep ROS    # check if ROS_DOMAIN_ID's match`
 `export TURTLEBOT3_MODEL=burger`
 
+### License Server Address
+`Server address: pcs-lm-01.lab.uvalight.net `
+`port: 6200 `
+
+
 
 
 
