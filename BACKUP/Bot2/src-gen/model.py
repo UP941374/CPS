@@ -45,8 +45,6 @@ class Model:
 			main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________region0go_west,
 			main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________region0go_south,
 			main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________region0froward_after_left,
-			main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________region0adjust_to_wall_in_front,
-			main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________region0emergency_stop,
 			main_region_autonomous_mode___logging_logging_logging,
 			main_region_autonomous_mode___logging_logging_cell_update,
 			main_region_autonomous_mode___logging_logging_south_row,
@@ -58,7 +56,7 @@ class Model:
 			main_region_autonomous_mode___logging_rotation_calibration_rotate_right,
 			main_region_autonomous_mode___logging_rotation_calibration_no_rotation,
 			null_state
-		) = range(44)
+		) = range(42)
 	
 	
 	class UserVar:
@@ -355,7 +353,7 @@ class Model:
 		
 		# for timed statechart:
 		self.timer_service = None
-		self.__time_events = [None] * 3
+		self.__time_events = [None] * 5
 		
 		# initializations:
 		self.user_var.limit_degree_high = 0.0
@@ -379,9 +377,9 @@ class Model:
 		self.user_var.straighten = False
 		self.user_var.turned = False
 		self.user_var.rotate_speed = 0.25
-		self.user_var.creep_speed = 0.1
-		self.user_var.forward_speed = 0.1
-		self.user_var.front_laser_distance = 0.2
+		self.user_var.creep_speed = 0.05
+		self.user_var.forward_speed = 0.15
+		self.user_var.front_laser_distance = 0.3
 		self.user_var.left_laser_distance = 0.3
 		self.user_var.calibration_speed = 0.1
 		self.base_values.max_speed = 0.5
@@ -517,7 +515,7 @@ class Model:
 			return self.__state_vector[1] == self.__State.main_region_autonomous_mode___logging_exploration_pre_exploration
 		if s == self.__State.main_region_autonomous_mode___logging_exploration_exploration________________________________________________________:
 			return (self.__state_vector[1] >= self.__State.main_region_autonomous_mode___logging_exploration_exploration________________________________________________________)\
-				and (self.__state_vector[1] <= self.__State.main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________region0emergency_stop)
+				and (self.__state_vector[1] <= self.__State.main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________region0froward_after_left)
 		if s == self.__State.main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________region0forward:
 			return self.__state_vector[1] == self.__State.main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________region0forward
 		if s == self.__State.main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________region0stop_before_right:
@@ -550,10 +548,6 @@ class Model:
 			return self.__state_vector[1] == self.__State.main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________region0go_south
 		if s == self.__State.main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________region0froward_after_left:
 			return self.__state_vector[1] == self.__State.main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________region0froward_after_left
-		if s == self.__State.main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________region0adjust_to_wall_in_front:
-			return self.__state_vector[1] == self.__State.main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________region0adjust_to_wall_in_front
-		if s == self.__State.main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________region0emergency_stop:
-			return self.__state_vector[1] == self.__State.main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________region0emergency_stop
 		if s == self.__State.main_region_autonomous_mode___logging_logging_logging:
 			return self.__state_vector[2] == self.__State.main_region_autonomous_mode___logging_logging_logging
 		if s == self.__State.main_region_autonomous_mode___logging_logging_cell_update:
@@ -579,7 +573,7 @@ class Model:
 	def time_elapsed(self, event_id):
 		"""Add time events to in event queue
 		"""
-		if event_id in range(3):
+		if event_id in range(5):
 			self.in_event_queue.put(lambda: self.raise_time_event(event_id))
 			self.run_cycle()
 	
@@ -713,42 +707,32 @@ class Model:
 	def __entry_action_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_go_east(self):
 		"""Entry action for state 'goEast'..
 		"""
+		self.timer_service.set_timer(self, 0, (1 * 1000), False)
 		self.output.speed = self.user_var.forward_speed
 		
 	def __entry_action_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_go_north(self):
 		"""Entry action for state 'goNorth'..
 		"""
-		self.timer_service.set_timer(self, 0, (1 * 1000), False)
+		self.timer_service.set_timer(self, 1, (1 * 1000), False)
 		self.output.speed = self.user_var.forward_speed
 		
 	def __entry_action_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_go_west(self):
 		"""Entry action for state 'goWest'..
 		"""
+		self.timer_service.set_timer(self, 2, (1 * 1000), False)
 		self.output.speed = self.user_var.forward_speed
 		
 	def __entry_action_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_go_south(self):
 		"""Entry action for state 'goSouth'..
 		"""
-		self.timer_service.set_timer(self, 1, (1 * 1000), False)
+		self.timer_service.set_timer(self, 3, (1 * 1000), False)
 		self.output.speed = self.user_var.forward_speed
 		
 	def __entry_action_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_froward_after_left(self):
 		"""Entry action for state 'frowardAfterLeft'..
 		"""
-		self.timer_service.set_timer(self, 2, (2 * 1000), False)
+		self.timer_service.set_timer(self, 4, (2 * 1000), False)
 		self.output.speed = self.user_var.forward_speed
-		
-	def __entry_action_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_adjust_to_wall_in_front(self):
-		"""Entry action for state 'adjustToWallInFront'..
-		"""
-		self.output.speed = -0.03
-		self.output.rotation = 0.0
-		
-	def __entry_action_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_emergency_stop(self):
-		"""Entry action for state 'emergencyStop'..
-		"""
-		self.output.speed = 0.0
-		self.output.rotation = 0.0
 		
 	def __entry_action_main_region_autonomous_mode___logging_logging_cell_update(self):
 		"""Entry action for state 'Cell update'..
@@ -866,35 +850,32 @@ class Model:
 	def __exit_action_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_go_east(self):
 		"""Exit action for state 'goEast'..
 		"""
+		self.timer_service.unset_timer(self, 0)
 		self.output.speed = 0.0
 		
 	def __exit_action_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_go_north(self):
 		"""Exit action for state 'goNorth'..
 		"""
-		self.timer_service.unset_timer(self, 0)
+		self.timer_service.unset_timer(self, 1)
 		self.output.speed = 0.0
 		
 	def __exit_action_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_go_west(self):
 		"""Exit action for state 'goWest'..
 		"""
+		self.timer_service.unset_timer(self, 2)
 		self.output.speed = 0.0
 		
 	def __exit_action_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_go_south(self):
 		"""Exit action for state 'goSouth'..
 		"""
-		self.timer_service.unset_timer(self, 1)
+		self.timer_service.unset_timer(self, 3)
 		self.output.speed = 0.0
 		
 	def __exit_action_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_froward_after_left(self):
 		"""Exit action for state 'frowardAfterLeft'..
 		"""
-		self.timer_service.unset_timer(self, 2)
+		self.timer_service.unset_timer(self, 4)
 		self.user_var.turned = False
-		
-	def __exit_action_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_adjust_to_wall_in_front(self):
-		"""Exit action for state 'adjustToWallInFront'..
-		"""
-		self.output.speed = 0.0
 		
 	def __enter_sequence_main_region_manual_mode_default(self):
 		"""'default' enter sequence for state Manual Mode.
@@ -1115,22 +1096,6 @@ class Model:
 		"""
 		self.__entry_action_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_froward_after_left()
 		self.__state_vector[1] = self.State.main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________region0froward_after_left
-		self.__state_conf_vector_position = 1
-		self.__state_conf_vector_changed = True
-		
-	def __enter_sequence_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_adjust_to_wall_in_front_default(self):
-		"""'default' enter sequence for state adjustToWallInFront.
-		"""
-		self.__entry_action_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_adjust_to_wall_in_front()
-		self.__state_vector[1] = self.State.main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________region0adjust_to_wall_in_front
-		self.__state_conf_vector_position = 1
-		self.__state_conf_vector_changed = True
-		
-	def __enter_sequence_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_emergency_stop_default(self):
-		"""'default' enter sequence for state emergencyStop.
-		"""
-		self.__entry_action_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_emergency_stop()
-		self.__state_vector[1] = self.State.main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________region0emergency_stop
 		self.__state_conf_vector_position = 1
 		self.__state_conf_vector_changed = True
 		
@@ -1441,19 +1406,6 @@ class Model:
 		self.__state_conf_vector_position = 1
 		self.__exit_action_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_froward_after_left()
 		
-	def __exit_sequence_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_adjust_to_wall_in_front(self):
-		"""Default exit sequence for state adjustToWallInFront.
-		"""
-		self.__state_vector[1] = self.State.null_state
-		self.__state_conf_vector_position = 1
-		self.__exit_action_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_adjust_to_wall_in_front()
-		
-	def __exit_sequence_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_emergency_stop(self):
-		"""Default exit sequence for state emergencyStop.
-		"""
-		self.__state_vector[1] = self.State.null_state
-		self.__state_conf_vector_position = 1
-		
 	def __exit_sequence_main_region_autonomous_mode___logging_logging_logging(self):
 		"""Default exit sequence for state Logging.
 		"""
@@ -1576,10 +1528,6 @@ class Model:
 			self.__exit_sequence_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_go_south()
 		elif state == self.State.main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________region0froward_after_left:
 			self.__exit_sequence_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_froward_after_left()
-		elif state == self.State.main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________region0adjust_to_wall_in_front:
-			self.__exit_sequence_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_adjust_to_wall_in_front()
-		elif state == self.State.main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________region0emergency_stop:
-			self.__exit_sequence_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_emergency_stop()
 		state = self.__state_vector[2]
 		if state == self.State.main_region_autonomous_mode___logging_logging_logging:
 			self.__exit_sequence_main_region_autonomous_mode___logging_logging_logging()
@@ -1674,10 +1622,6 @@ class Model:
 			self.__exit_sequence_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_go_south()
 		elif state == self.State.main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________region0froward_after_left:
 			self.__exit_sequence_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_froward_after_left()
-		elif state == self.State.main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________region0adjust_to_wall_in_front:
-			self.__exit_sequence_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_adjust_to_wall_in_front()
-		elif state == self.State.main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________region0emergency_stop:
-			self.__exit_sequence_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_emergency_stop()
 		
 	def __exit_sequence_main_region_autonomous_mode___logging_logging(self):
 		"""Default exit sequence for region Logging.
@@ -1991,21 +1935,17 @@ class Model:
 		transitioned_after = self.__main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________react(transitioned_before)
 		if not self.__do_completion:
 			if transitioned_after < 1:
-				if self.laser_distance.d0 < 0.15:
-					self.__exit_sequence_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_forward()
-					self.__enter_sequence_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_emergency_stop_default()
-					transitioned_after = 1
-				elif self.laser_distance.d90 > self.user_var.left_laser_distance and not self.user_var.turned:
+				if self.laser_distance.d90 > self.user_var.left_laser_distance and not self.user_var.turned:
 					self.__exit_sequence_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_forward()
 					self.__enter_sequence_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_left_clear_default()
+					transitioned_after = 1
+				elif self.laser_distance.d0 < self.user_var.front_laser_distance:
+					self.__exit_sequence_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_forward()
+					self.__enter_sequence_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_stop_before_right_default()
 					transitioned_after = 1
 				elif self.user_var.turned:
 					self.__exit_sequence_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_forward()
 					self.__enter_sequence_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_froward_after_left_default()
-					transitioned_after = 1
-				elif self.laser_distance.d0 < self.user_var.front_laser_distance:
-					self.__exit_sequence_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_forward()
-					self.__enter_sequence_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_adjust_to_wall_in_front_default()
 					transitioned_after = 1
 		return transitioned_after
 	
@@ -2167,8 +2107,9 @@ class Model:
 		transitioned_after = self.__main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________react(transitioned_before)
 		if not self.__do_completion:
 			if transitioned_after < 1:
-				if self.odom.y < ((self.user_var.old_y - (self.grid.grid_size))):
+				if self.__time_events[0]:
 					self.__exit_sequence_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_go_east()
+					self.__time_events[0] = False
 					self.__enter_sequence_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_east_to_north_default()
 					transitioned_after = 1
 		return transitioned_after
@@ -2181,9 +2122,9 @@ class Model:
 		transitioned_after = self.__main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________react(transitioned_before)
 		if not self.__do_completion:
 			if transitioned_after < 1:
-				if self.__time_events[0]:
+				if self.__time_events[1]:
 					self.__exit_sequence_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_go_north()
-					self.__time_events[0] = False
+					self.__time_events[1] = False
 					self.__enter_sequence_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_north_to_west_default()
 					transitioned_after = 1
 		return transitioned_after
@@ -2196,8 +2137,9 @@ class Model:
 		transitioned_after = self.__main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________react(transitioned_before)
 		if not self.__do_completion:
 			if transitioned_after < 1:
-				if self.odom.y > ((self.user_var.old_y + (self.grid.grid_size))):
+				if self.__time_events[2]:
 					self.__exit_sequence_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_go_west()
+					self.__time_events[2] = False
 					self.__enter_sequence_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_west_to_south_default()
 					transitioned_after = 1
 		return transitioned_after
@@ -2210,9 +2152,9 @@ class Model:
 		transitioned_after = self.__main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________react(transitioned_before)
 		if not self.__do_completion:
 			if transitioned_after < 1:
-				if self.__time_events[1]:
+				if self.__time_events[3]:
 					self.__exit_sequence_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_go_south()
-					self.__time_events[1] = False
+					self.__time_events[3] = False
 					self.__enter_sequence_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_south_to_east_default()
 					transitioned_after = 1
 		return transitioned_after
@@ -2225,33 +2167,11 @@ class Model:
 		transitioned_after = self.__main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________react(transitioned_before)
 		if not self.__do_completion:
 			if transitioned_after < 1:
-				if self.__time_events[2]:
+				if self.__time_events[4]:
 					self.__exit_sequence_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_froward_after_left()
-					self.__time_events[2] = False
+					self.__time_events[4] = False
 					self.__enter_sequence_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_forward_default()
 					transitioned_after = 1
-		return transitioned_after
-	
-	
-	def __main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_adjust_to_wall_in_front_react(self, transitioned_before):
-		"""Implementation of __main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_adjust_to_wall_in_front_react function.
-		"""
-		transitioned_after = transitioned_before
-		transitioned_after = self.__main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________react(transitioned_before)
-		if not self.__do_completion:
-			if transitioned_after < 1:
-				if self.laser_distance.d0 >= 0.25:
-					self.__exit_sequence_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_adjust_to_wall_in_front()
-					self.__enter_sequence_main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_stop_before_right_default()
-					transitioned_after = 1
-		return transitioned_after
-	
-	
-	def __main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_emergency_stop_react(self, transitioned_before):
-		"""Implementation of __main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_emergency_stop_react function.
-		"""
-		transitioned_after = transitioned_before
-		transitioned_after = self.__main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________react(transitioned_before)
 		return transitioned_after
 	
 	
@@ -2278,15 +2198,15 @@ class Model:
 					self.__exit_sequence_main_region_autonomous_mode___logging_logging_cell_update()
 					self.__enter_sequence_main_region_autonomous_mode___logging_logging_north_row_default()
 					transitioned_after = 2
-				elif self.grid.orientation == 1 and self.odom.y < ((self.user_var.old_y - (self.grid.grid_size))):
+				elif self.grid.orientation == 1 and self.odom.y < ((self.user_var.old_y + self.grid.grid_size)):
 					self.__exit_sequence_main_region_autonomous_mode___logging_logging_cell_update()
 					self.__enter_sequence_main_region_autonomous_mode___logging_logging_east_default()
 					transitioned_after = 2
-				elif self.grid.orientation == 3 and self.odom.y > ((self.user_var.old_y + (self.grid.grid_size))):
+				elif self.grid.orientation == 3 and self.odom.y > ((self.user_var.old_x + self.grid.grid_size)):
 					self.__exit_sequence_main_region_autonomous_mode___logging_logging_cell_update()
 					self.__enter_sequence_main_region_autonomous_mode___logging_logging_west_default()
 					transitioned_after = 2
-				elif self.grid.orientation == 2 and self.odom.x < ((self.user_var.old_x - (self.grid.grid_size))):
+				elif self.grid.orientation == 2 and self.odom.x < ((self.user_var.old_x + self.grid.grid_size)):
 					self.__exit_sequence_main_region_autonomous_mode___logging_logging_cell_update()
 					self.__enter_sequence_main_region_autonomous_mode___logging_logging_south_row_default()
 					transitioned_after = 2
@@ -2299,7 +2219,7 @@ class Model:
 		transitioned_after = transitioned_before
 		if not self.__do_completion:
 			if transitioned_after < 2:
-				if self.output.speed >= 0.1:
+				if self.output.speed > 0.1:
 					self.__exit_sequence_main_region_autonomous_mode___logging_logging_south_row()
 					self.__enter_sequence_main_region_autonomous_mode___logging_logging_cell_update_default()
 					transitioned_after = 2
@@ -2312,7 +2232,7 @@ class Model:
 		transitioned_after = transitioned_before
 		if not self.__do_completion:
 			if transitioned_after < 2:
-				if self.output.speed >= 0.1:
+				if self.output.speed > 0.1:
 					self.__exit_sequence_main_region_autonomous_mode___logging_logging_east()
 					self.__enter_sequence_main_region_autonomous_mode___logging_logging_cell_update_default()
 					transitioned_after = 2
@@ -2325,7 +2245,7 @@ class Model:
 		transitioned_after = transitioned_before
 		if not self.__do_completion:
 			if transitioned_after < 2:
-				if self.output.speed >= 0.1:
+				if self.output.speed > 0.1:
 					self.__exit_sequence_main_region_autonomous_mode___logging_logging_west()
 					self.__enter_sequence_main_region_autonomous_mode___logging_logging_cell_update_default()
 					transitioned_after = 2
@@ -2338,7 +2258,7 @@ class Model:
 		transitioned_after = transitioned_before
 		if not self.__do_completion:
 			if transitioned_after < 2:
-				if self.output.speed >= 0.1:
+				if self.output.speed > 0.1:
 					self.__exit_sequence_main_region_autonomous_mode___logging_logging_north_row()
 					self.__enter_sequence_main_region_autonomous_mode___logging_logging_cell_update_default()
 					transitioned_after = 2
@@ -2409,6 +2329,8 @@ class Model:
 		self.__time_events[0] = False
 		self.__time_events[1] = False
 		self.__time_events[2] = False
+		self.__time_events[3] = False
+		self.__time_events[4] = False
 	
 	
 	def __micro_step(self):
@@ -2473,10 +2395,6 @@ class Model:
 				transitioned = self.__main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_go_south_react(transitioned)
 			elif state == self.State.main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________region0froward_after_left:
 				transitioned = self.__main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_froward_after_left_react(transitioned)
-			elif state == self.State.main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________region0adjust_to_wall_in_front:
-				transitioned = self.__main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_adjust_to_wall_in_front_react(transitioned)
-			elif state == self.State.main_region_autonomous_mode___logging_exploration_exploration_________________________________________________________region0emergency_stop:
-				transitioned = self.__main_region_autonomous_mode___logging_exploration_exploration__________________________________________________________region0_emergency_stop_react(transitioned)
 		if self.__state_conf_vector_position < 2:
 			state = self.__state_vector[2]
 			if state == self.State.main_region_autonomous_mode___logging_logging_logging:
@@ -2533,7 +2451,7 @@ class Model:
 			next_event = self.__get_next_event()
 			if next_event is not None:
 				self.__execute_queued_event(next_event)
-			condition_0 = self.computer.m_press or self.computer.w_press or self.computer.a_press or self.computer.s_press or self.computer.d_press or self.computer.x_press or self.__time_events[0] or self.__time_events[1] or self.__time_events[2]
+			condition_0 = self.computer.m_press or self.computer.w_press or self.computer.a_press or self.computer.s_press or self.computer.d_press or self.computer.x_press or self.__time_events[0] or self.__time_events[1] or self.__time_events[2] or self.__time_events[3] or self.__time_events[4]
 		self.__is_executing = False
 	
 	
