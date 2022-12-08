@@ -40,7 +40,6 @@ class Model:
 			sautonomous_mode___logging_exploration_update_row_down,
 			sautonomous_mode___logging_exploration_update_col_up,
 			sautonomous_mode___logging_exploration_update_col_down,
-			sautonomous_mode___logging_exploration_detect_walls,
 			sautonomous_mode___logging_rotation_calibration_calibrating,
 			sautonomous_mode___logging_rotation_calibration_rotate_left,
 			sautonomous_mode___logging_rotation_calibration_rotate_right,
@@ -52,7 +51,7 @@ class Model:
 			sautonomous_mode___logging_orientation_check_east,
 			sprepare,
 			null_state
-		) = range(38)
+		) = range(37)
 	
 	
 	class UserVar:
@@ -347,7 +346,7 @@ class Model:
 		
 		# for timed statechart:
 		self.timer_service = None
-		self.__time_events = [None] * 4
+		self.__time_events = [None] * 3
 		
 		# initializations:
 		self.user_var.limit_degree_high = 0.0
@@ -391,10 +390,10 @@ class Model:
 		self.grid.row = 0
 		self.grid.orientation = 0
 		self.grid.visited = False
-		self.grid.wall_front = -1
-		self.grid.wall_right = -1
-		self.grid.wall_back = -1
-		self.grid.wall_left = -1
+		self.grid.wall_front = 0
+		self.grid.wall_right = 0
+		self.grid.wall_back = 0
+		self.grid.wall_left = 0
 		self.grid.grid_size = 0.48
 		self.grid.max_col = 3
 		self.grid.max_row = 3
@@ -529,8 +528,6 @@ class Model:
 			return self.__state_vector[1] == self.__State.sautonomous_mode___logging_exploration_update_col_up
 		if s == self.__State.sautonomous_mode___logging_exploration_update_col_down:
 			return self.__state_vector[1] == self.__State.sautonomous_mode___logging_exploration_update_col_down
-		if s == self.__State.sautonomous_mode___logging_exploration_detect_walls:
-			return self.__state_vector[1] == self.__State.sautonomous_mode___logging_exploration_detect_walls
 		if s == self.__State.sautonomous_mode___logging_rotation_calibration_calibrating:
 			return self.__state_vector[2] == self.__State.sautonomous_mode___logging_rotation_calibration_calibrating
 		if s == self.__State.sautonomous_mode___logging_rotation_calibration_rotate_left:
@@ -556,7 +553,7 @@ class Model:
 	def time_elapsed(self, event_id):
 		"""Add time events to in event queue
 		"""
-		if event_id in range(4):
+		if event_id in range(3):
 			self.in_event_queue.put(lambda: self.raise_time_event(event_id))
 			self.run_cycle()
 	
@@ -656,7 +653,6 @@ class Model:
 	def __entry_action_s_autonomous_mode___logging_exploration_update_coords(self):
 		"""Entry action for state 'updateCoords'..
 		"""
-		self.timer_service.set_timer(self, 1, (1 * 1000), False)
 		self.user_var.user_x = self.odom.x
 		self.user_var.user_y = self.odom.y
 		
@@ -675,7 +671,7 @@ class Model:
 	def __entry_action_s_autonomous_mode___logging_exploration_adjust_rotation(self):
 		"""Entry action for state 'adjustRotation'..
 		"""
-		self.timer_service.set_timer(self, 2, (2 * 1000), False)
+		self.timer_service.set_timer(self, 1, (2 * 1000), False)
 		self.user_var.straighten = True
 		
 	def __entry_action_s_autonomous_mode___logging_exploration_update_row_up(self):
@@ -701,16 +697,6 @@ class Model:
 		"""
 		self.grid.column = self.grid.column - 1
 		self.__completed = True
-		
-	def __entry_action_s_autonomous_mode___logging_exploration_detect_walls(self):
-		"""Entry action for state 'detectWalls'..
-		"""
-		self.grid.wall_front = 1 if self.laser_distance.d0 < self.grid.grid_size else 0
-		self.grid.wall_right = 1 if self.laser_distance.dm90 < self.grid.grid_size else 0
-		self.grid.wall_back = 1 if self.laser_distance.d180 < self.grid.grid_size else 0
-		self.grid.wall_left = 1 if self.laser_distance.d90 < self.grid.grid_size else 0
-		self.grid.visited = True
-		self.grid.update = True
 		
 	def __entry_action_s_autonomous_mode___logging_rotation_calibration_rotate_left(self):
 		""".
@@ -761,7 +747,7 @@ class Model:
 	def __entry_action_s_prepare(self):
 		"""Entry action for state 'prepare'..
 		"""
-		self.timer_service.set_timer(self, 3, (5 * 1000), False)
+		self.timer_service.set_timer(self, 2, (5 * 1000), False)
 		
 	def __exit_action_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration(self):
 		"""Exit action for state 'Calibration'..
@@ -790,11 +776,6 @@ class Model:
 		self.output.speed = 0.0
 		self.user_var.turned = False
 		
-	def __exit_action_s_autonomous_mode___logging_exploration_update_coords(self):
-		"""Exit action for state 'updateCoords'..
-		"""
-		self.timer_service.unset_timer(self, 1)
-		
 	def __exit_action_s_autonomous_mode___logging_exploration_wall_ahead(self):
 		"""Exit action for state 'wallAhead'..
 		"""
@@ -809,7 +790,7 @@ class Model:
 	def __exit_action_s_autonomous_mode___logging_exploration_adjust_rotation(self):
 		"""Exit action for state 'adjustRotation'..
 		"""
-		self.timer_service.unset_timer(self, 2)
+		self.timer_service.unset_timer(self, 1)
 		self.user_var.straighten = False
 		
 	def __exit_action_s_autonomous_mode___logging_rotation_calibration_rotate_left(self):
@@ -825,7 +806,7 @@ class Model:
 	def __exit_action_s_prepare(self):
 		"""Exit action for state 'prepare'..
 		"""
-		self.timer_service.unset_timer(self, 3)
+		self.timer_service.unset_timer(self, 2)
 		
 	def __enter_sequence_s_manual_mode_default(self):
 		"""'default' enter sequence for state Manual Mode.
@@ -1009,14 +990,6 @@ class Model:
 		"""
 		self.__entry_action_s_autonomous_mode___logging_exploration_update_col_down()
 		self.__state_vector[1] = self.State.sautonomous_mode___logging_exploration_update_col_down
-		self.__state_conf_vector_position = 1
-		self.__state_conf_vector_changed = True
-		
-	def __enter_sequence_s_autonomous_mode___logging_exploration_detect_walls_default(self):
-		"""'default' enter sequence for state detectWalls.
-		"""
-		self.__entry_action_s_autonomous_mode___logging_exploration_detect_walls()
-		self.__state_vector[1] = self.State.sautonomous_mode___logging_exploration_detect_walls
 		self.__state_conf_vector_position = 1
 		self.__state_conf_vector_changed = True
 		
@@ -1245,7 +1218,6 @@ class Model:
 		"""
 		self.__state_vector[1] = self.State.null_state
 		self.__state_conf_vector_position = 1
-		self.__exit_action_s_autonomous_mode___logging_exploration_update_coords()
 		
 	def __exit_sequence_s_autonomous_mode___logging_exploration_wall_ahead(self):
 		"""Default exit sequence for state wallAhead.
@@ -1288,12 +1260,6 @@ class Model:
 		
 	def __exit_sequence_s_autonomous_mode___logging_exploration_update_col_down(self):
 		"""Default exit sequence for state updateColDown.
-		"""
-		self.__state_vector[1] = self.State.null_state
-		self.__state_conf_vector_position = 1
-		
-	def __exit_sequence_s_autonomous_mode___logging_exploration_detect_walls(self):
-		"""Default exit sequence for state detectWalls.
 		"""
 		self.__state_vector[1] = self.State.null_state
 		self.__state_conf_vector_position = 1
@@ -1419,8 +1385,6 @@ class Model:
 			self.__exit_sequence_s_autonomous_mode___logging_exploration_update_col_up()
 		elif state == self.State.sautonomous_mode___logging_exploration_update_col_down:
 			self.__exit_sequence_s_autonomous_mode___logging_exploration_update_col_down()
-		elif state == self.State.sautonomous_mode___logging_exploration_detect_walls:
-			self.__exit_sequence_s_autonomous_mode___logging_exploration_detect_walls()
 		state = self.__state_vector[2]
 		if state == self.State.sautonomous_mode___logging_rotation_calibration_calibrating:
 			self.__exit_sequence_s_autonomous_mode___logging_rotation_calibration_calibrating()
@@ -1507,8 +1471,6 @@ class Model:
 			self.__exit_sequence_s_autonomous_mode___logging_exploration_update_col_up()
 		elif state == self.State.sautonomous_mode___logging_exploration_update_col_down:
 			self.__exit_sequence_s_autonomous_mode___logging_exploration_update_col_down()
-		elif state == self.State.sautonomous_mode___logging_exploration_detect_walls:
-			self.__exit_sequence_s_autonomous_mode___logging_exploration_detect_walls()
 		
 	def __exit_sequence_s_autonomous_mode___logging_rotation_calibration(self):
 		"""Default exit sequence for region RotationCalibration.
@@ -1734,7 +1696,7 @@ class Model:
 		transitioned_after = self.__s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_react(transitioned_before)
 		if not self.__do_completion:
 			if transitioned_after < 0:
-				if self.laser_distance.d90 < ((self.grid.grid_size * 2)) and self.laser_distance.dm90 < ((self.grid.grid_size * 2)):
+				if self.laser_distance.d90 < self.grid.grid_size and self.laser_distance.dm90 < self.grid.grid_size:
 					self.__exit_sequence_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_creep()
 					self.__enter_sequence_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_set_zero_default()
 					transitioned_after = 0
@@ -1855,10 +1817,21 @@ class Model:
 		transitioned_after = transitioned_before
 		if not self.__do_completion:
 			if transitioned_after < 1:
-				if self.__time_events[1]:
+				if self.user_var.orientation == 0:
 					self.__exit_sequence_s_autonomous_mode___logging_exploration_update_coords()
-					self.__time_events[1] = False
-					self.__enter_sequence_s_autonomous_mode___logging_exploration_detect_walls_default()
+					self.__enter_sequence_s_autonomous_mode___logging_exploration_update_row_up_default()
+					transitioned_after = 1
+				elif self.user_var.orientation == 2:
+					self.__exit_sequence_s_autonomous_mode___logging_exploration_update_coords()
+					self.__enter_sequence_s_autonomous_mode___logging_exploration_update_row_down_default()
+					transitioned_after = 1
+				elif self.user_var.orientation == 3:
+					self.__exit_sequence_s_autonomous_mode___logging_exploration_update_coords()
+					self.__enter_sequence_s_autonomous_mode___logging_exploration_update_col_down_default()
+					transitioned_after = 1
+				elif self.user_var.orientation == 1:
+					self.__exit_sequence_s_autonomous_mode___logging_exploration_update_coords()
+					self.__enter_sequence_s_autonomous_mode___logging_exploration_update_col_up_default()
 					transitioned_after = 1
 		return transitioned_after
 	
@@ -1895,9 +1868,9 @@ class Model:
 		transitioned_after = transitioned_before
 		if not self.__do_completion:
 			if transitioned_after < 1:
-				if self.__time_events[2]:
+				if self.__time_events[1]:
 					self.__exit_sequence_s_autonomous_mode___logging_exploration_adjust_rotation()
-					self.__time_events[2] = False
+					self.__time_events[1] = False
 					self.__enter_sequence_s_autonomous_mode___logging_exploration_await_default()
 					transitioned_after = 1
 		return transitioned_after
@@ -1956,31 +1929,6 @@ class Model:
 			self.__state_vector[1] = self.State.sautonomous_mode___logging_exploration_await
 			self.__state_conf_vector_position = 1
 			self.__state_conf_vector_changed = True
-		return transitioned_after
-	
-	
-	def __s_autonomous_mode___logging_exploration_detect_walls_react(self, transitioned_before):
-		"""Implementation of __s_autonomous_mode___logging_exploration_detect_walls_react function.
-		"""
-		transitioned_after = transitioned_before
-		if not self.__do_completion:
-			if transitioned_after < 1:
-				if self.user_var.orientation == 1:
-					self.__exit_sequence_s_autonomous_mode___logging_exploration_detect_walls()
-					self.__enter_sequence_s_autonomous_mode___logging_exploration_update_col_up_default()
-					transitioned_after = 1
-				elif self.user_var.orientation == 3:
-					self.__exit_sequence_s_autonomous_mode___logging_exploration_detect_walls()
-					self.__enter_sequence_s_autonomous_mode___logging_exploration_update_col_down_default()
-					transitioned_after = 1
-				elif self.user_var.orientation == 2:
-					self.__exit_sequence_s_autonomous_mode___logging_exploration_detect_walls()
-					self.__enter_sequence_s_autonomous_mode___logging_exploration_update_row_down_default()
-					transitioned_after = 1
-				elif self.user_var.orientation == 0:
-					self.__exit_sequence_s_autonomous_mode___logging_exploration_detect_walls()
-					self.__enter_sequence_s_autonomous_mode___logging_exploration_update_row_up_default()
-					transitioned_after = 1
 		return transitioned_after
 	
 	
@@ -2130,9 +2078,9 @@ class Model:
 		transitioned_after = self.__react(transitioned_before)
 		if not self.__do_completion:
 			if transitioned_after < 0:
-				if self.__time_events[3]:
+				if self.__time_events[2]:
 					self.__exit_sequence_s_prepare()
-					self.__time_events[3] = False
+					self.__time_events[2] = False
 					self.__enter_sequence_s_manual_mode_default()
 					transitioned_after = 0
 		return transitioned_after
@@ -2150,7 +2098,6 @@ class Model:
 		self.__time_events[0] = False
 		self.__time_events[1] = False
 		self.__time_events[2] = False
-		self.__time_events[3] = False
 	
 	
 	def __micro_step(self):
@@ -2209,8 +2156,6 @@ class Model:
 				transitioned = self.__s_autonomous_mode___logging_exploration_update_col_up_react(transitioned)
 			elif state == self.State.sautonomous_mode___logging_exploration_update_col_down:
 				transitioned = self.__s_autonomous_mode___logging_exploration_update_col_down_react(transitioned)
-			elif state == self.State.sautonomous_mode___logging_exploration_detect_walls:
-				transitioned = self.__s_autonomous_mode___logging_exploration_detect_walls_react(transitioned)
 		if self.__state_conf_vector_position < 2:
 			state = self.__state_vector[2]
 			if state == self.State.sautonomous_mode___logging_rotation_calibration_calibrating:
@@ -2265,7 +2210,7 @@ class Model:
 			next_event = self.__get_next_event()
 			if next_event is not None:
 				self.__execute_queued_event(next_event)
-			condition_0 = self.computer.m_press or self.computer.w_press or self.computer.a_press or self.computer.s_press or self.computer.d_press or self.computer.x_press or self.__time_events[0] or self.__time_events[1] or self.__time_events[2] or self.__time_events[3]
+			condition_0 = self.computer.m_press or self.computer.w_press or self.computer.a_press or self.computer.s_press or self.computer.d_press or self.computer.x_press or self.__time_events[0] or self.__time_events[1] or self.__time_events[2]
 		self.__is_executing = False
 	
 	
