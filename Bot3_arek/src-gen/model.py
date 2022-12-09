@@ -1556,16 +1556,6 @@ class Model:
 		elif state == self.State.sautonomous_mode___logging_orientation_check_east:
 			self.__exit_sequence_s_autonomous_mode___logging_orientation_check_east()
 		
-	def __react_s_autonomous_mode___logging_exploration__choice_0(self):
-		"""The reactions of state null..
-		"""
-		if self.laser_distance.d90 > self.grid.grid_size and not self.user_var.turned:
-			self.__enter_sequence_s_autonomous_mode___logging_exploration_left_clear_default()
-		elif self.laser_distance.d0 < self.grid.grid_size:
-			self.__enter_sequence_s_autonomous_mode___logging_exploration_wall_ahead_default()
-		else:
-			self.__enter_sequence_s_autonomous_mode___logging_exploration_cell_forward_default()
-		
 	def __react_s_manual_mode_manual_mode__entry_default(self):
 		"""Default react sequence for initial entry .
 		"""
@@ -1855,10 +1845,12 @@ class Model:
 		if self.__do_completion:
 			self.__state_vector[1] = self.State.null_state
 			self.__state_conf_vector_position = 1
-			if 0 == 1:
-				self.__enter_sequence_s_autonomous_mode___logging_exploration_finish_default()
+			if self.laser_distance.d90 > self.grid.grid_size and not self.user_var.turned:
+				self.__enter_sequence_s_autonomous_mode___logging_exploration_left_clear_default()
+			elif self.laser_distance.d0 < self.grid.grid_size:
+				self.__enter_sequence_s_autonomous_mode___logging_exploration_wall_ahead_default()
 			else:
-				self.__react_s_autonomous_mode___logging_exploration__choice_0()
+				self.__enter_sequence_s_autonomous_mode___logging_exploration_cell_forward_default()
 		return transitioned_after
 	
 	
@@ -1871,6 +1863,10 @@ class Model:
 				if ((self.user_var.user_x + (self.grid.grid_size)) <= self.odom.x) or ((self.user_var.user_x - (self.grid.grid_size)) >= self.odom.x) or ((self.user_var.user_y + (self.grid.grid_size)) <= self.odom.y) or ((self.user_var.user_y - (self.grid.grid_size)) >= self.odom.y):
 					self.__exit_sequence_s_autonomous_mode___logging_exploration_cell_forward()
 					self.__enter_sequence_s_autonomous_mode___logging_exploration_update_coords_default()
+					transitioned_after = 1
+				elif self.odom.x <= self.start_pos.zero_x:
+					self.__exit_sequence_s_autonomous_mode___logging_exploration_cell_forward()
+					self.__enter_sequence_s_autonomous_mode___logging_exploration_finish_default()
 					transitioned_after = 1
 		return transitioned_after
 	
