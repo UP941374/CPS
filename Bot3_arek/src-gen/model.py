@@ -368,8 +368,8 @@ class Model:
 		self.user_var.base_rotation = 0.2
 		self.user_var.turn_type = 0
 		self.user_var.limit_type = 0
-		self.user_var.specific_row = 1
-		self.user_var.specific_column = 3
+		self.user_var.specific_row = 3
+		self.user_var.specific_column = 1
 		self.user_var.is_in_specific_exploration = False
 		self.user_var.xrow = 0
 		self.user_var.ycol = 0
