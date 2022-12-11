@@ -28,6 +28,11 @@ class Model:
 			sautonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0position_in_the_middle_,
 			sautonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0ready_,
 			sautonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0adjust_rotation,
+			sautonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0centering__rotate_to_wall,
+			sautonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0centering__move_closer_to_wall,
+			sautonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0centering__rotate_back_,
+			sautonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0centering__move_away_from_wall,
+			sautonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0adjust_vertical,
 			sautonomous_mode___logging_calibration_on_entry_to_the_maze_prepare_calibration,
 			sautonomous_mode___logging_spre_exploration,
 			sautonomous_mode___logging_sawait,
@@ -56,7 +61,7 @@ class Model:
 			sautonomous_mode___logging_orientation_check_east,
 			sprepare,
 			null_state
-		) = range(42)
+		) = range(47)
 	
 	
 	class UserVar:
@@ -504,7 +509,7 @@ class Model:
 				and (self.__state_vector[0] <= self.__State.sautonomous_mode___logging_orientation_check_east)
 		if s == self.__State.sautonomous_mode___logging_calibration_on_entry_to_the_maze_calibration:
 			return (self.__state_vector[0] >= self.__State.sautonomous_mode___logging_calibration_on_entry_to_the_maze_calibration)\
-				and (self.__state_vector[0] <= self.__State.sautonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0adjust_rotation)
+				and (self.__state_vector[0] <= self.__State.sautonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0adjust_vertical)
 		if s == self.__State.sautonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0creep:
 			return self.__state_vector[0] == self.__State.sautonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0creep
 		if s == self.__State.sautonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0set_zero:
@@ -515,6 +520,16 @@ class Model:
 			return self.__state_vector[0] == self.__State.sautonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0ready_
 		if s == self.__State.sautonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0adjust_rotation:
 			return self.__state_vector[0] == self.__State.sautonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0adjust_rotation
+		if s == self.__State.sautonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0centering__rotate_to_wall:
+			return self.__state_vector[0] == self.__State.sautonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0centering__rotate_to_wall
+		if s == self.__State.sautonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0centering__move_closer_to_wall:
+			return self.__state_vector[0] == self.__State.sautonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0centering__move_closer_to_wall
+		if s == self.__State.sautonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0centering__rotate_back_:
+			return self.__state_vector[0] == self.__State.sautonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0centering__rotate_back_
+		if s == self.__State.sautonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0centering__move_away_from_wall:
+			return self.__state_vector[0] == self.__State.sautonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0centering__move_away_from_wall
+		if s == self.__State.sautonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0adjust_vertical:
+			return self.__state_vector[0] == self.__State.sautonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0adjust_vertical
 		if s == self.__State.sautonomous_mode___logging_calibration_on_entry_to_the_maze_prepare_calibration:
 			return self.__state_vector[0] == self.__State.sautonomous_mode___logging_calibration_on_entry_to_the_maze_prepare_calibration
 		if s == self.__State.sautonomous_mode___logging_spre_exploration:
@@ -649,8 +664,35 @@ class Model:
 	def __entry_action_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_adjust_rotation(self):
 		"""Entry action for state 'Adjust rotation'..
 		"""
-		self.timer_service.set_timer(self, 0, (2 * 1000), False)
+		self.timer_service.set_timer(self, 0, (3 * 1000), False)
 		self.user_var.straighten = True
+		
+	def __entry_action_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_centering__rotate_to_wall(self):
+		"""Entry action for state 'Centering: rotate to wall'..
+		"""
+		self.output.rotation = 0.5
+		self.user_var.current_orientation = self.user_var.orientation
+		
+	def __entry_action_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_centering__move_closer_to_wall(self):
+		"""Entry action for state 'Centering: move closer to wall'..
+		"""
+		self.output.speed = 0.025
+		
+	def __entry_action_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_centering__rotate_back_(self):
+		"""Entry action for state 'Centering: rotate back '..
+		"""
+		self.output.rotation = -0.5
+		self.user_var.current_orientation = self.user_var.orientation
+		
+	def __entry_action_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_centering__move_away_from_wall(self):
+		"""Entry action for state 'Centering: move away from wall'..
+		"""
+		self.output.speed = -0.025
+		
+	def __entry_action_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_adjust_vertical(self):
+		"""Entry action for state 'Adjust vertical'..
+		"""
+		self.output.speed = -0.025
 		
 	def __entry_action_s_autonomous_mode___logging_s_await(self):
 		""".
@@ -830,6 +872,31 @@ class Model:
 		self.timer_service.unset_timer(self, 0)
 		self.user_var.straighten = False
 		
+	def __exit_action_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_centering__rotate_to_wall(self):
+		"""Exit action for state 'Centering: rotate to wall'..
+		"""
+		self.output.rotation = 0.0
+		
+	def __exit_action_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_centering__move_closer_to_wall(self):
+		"""Exit action for state 'Centering: move closer to wall'..
+		"""
+		self.output.speed = 0.0
+		
+	def __exit_action_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_centering__rotate_back_(self):
+		"""Exit action for state 'Centering: rotate back '..
+		"""
+		self.output.rotation = 0.0
+		
+	def __exit_action_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_centering__move_away_from_wall(self):
+		"""Exit action for state 'Centering: move away from wall'..
+		"""
+		self.output.speed = 0.0
+		
+	def __exit_action_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_adjust_vertical(self):
+		"""Exit action for state 'Adjust vertical'..
+		"""
+		self.output.speed = 0.0
+		
 	def __exit_action_s_autonomous_mode___logging_s_cell_forward(self):
 		"""Exit action for state 'cellForward'..
 		"""
@@ -953,19 +1020,59 @@ class Model:
 		self.__state_conf_vector_position = 0
 		self.__state_conf_vector_changed = True
 		
-	def __enter_sequence_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_position_in_the_middle__default(self):
-		"""'default' enter sequence for state Position in the middle .
-		"""
-		self.__entry_action_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_position_in_the_middle_()
-		self.__state_vector[0] = self.State.sautonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0position_in_the_middle_
-		self.__state_conf_vector_position = 0
-		self.__state_conf_vector_changed = True
-		
 	def __enter_sequence_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_ready__default(self):
 		"""'default' enter sequence for state Ready!.
 		"""
 		self.__entry_action_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_ready_()
 		self.__state_vector[0] = self.State.sautonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0ready_
+		self.__state_conf_vector_position = 0
+		self.__state_conf_vector_changed = True
+		
+	def __enter_sequence_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_adjust_rotation_default(self):
+		"""'default' enter sequence for state Adjust rotation.
+		"""
+		self.__entry_action_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_adjust_rotation()
+		self.__state_vector[0] = self.State.sautonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0adjust_rotation
+		self.__state_conf_vector_position = 0
+		self.__state_conf_vector_changed = True
+		
+	def __enter_sequence_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_centering__rotate_to_wall_default(self):
+		"""'default' enter sequence for state Centering: rotate to wall.
+		"""
+		self.__entry_action_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_centering__rotate_to_wall()
+		self.__state_vector[0] = self.State.sautonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0centering__rotate_to_wall
+		self.__state_conf_vector_position = 0
+		self.__state_conf_vector_changed = True
+		
+	def __enter_sequence_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_centering__move_closer_to_wall_default(self):
+		"""'default' enter sequence for state Centering: move closer to wall.
+		"""
+		self.__entry_action_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_centering__move_closer_to_wall()
+		self.__state_vector[0] = self.State.sautonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0centering__move_closer_to_wall
+		self.__state_conf_vector_position = 0
+		self.__state_conf_vector_changed = True
+		
+	def __enter_sequence_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_centering__rotate_back__default(self):
+		"""'default' enter sequence for state Centering: rotate back .
+		"""
+		self.__entry_action_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_centering__rotate_back_()
+		self.__state_vector[0] = self.State.sautonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0centering__rotate_back_
+		self.__state_conf_vector_position = 0
+		self.__state_conf_vector_changed = True
+		
+	def __enter_sequence_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_centering__move_away_from_wall_default(self):
+		"""'default' enter sequence for state Centering: move away from wall.
+		"""
+		self.__entry_action_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_centering__move_away_from_wall()
+		self.__state_vector[0] = self.State.sautonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0centering__move_away_from_wall
+		self.__state_conf_vector_position = 0
+		self.__state_conf_vector_changed = True
+		
+	def __enter_sequence_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_adjust_vertical_default(self):
+		"""'default' enter sequence for state Adjust vertical.
+		"""
+		self.__entry_action_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_adjust_vertical()
+		self.__state_vector[0] = self.State.sautonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0adjust_vertical
 		self.__state_conf_vector_position = 0
 		self.__state_conf_vector_changed = True
 		
@@ -1290,6 +1397,41 @@ class Model:
 		self.__state_conf_vector_position = 0
 		self.__exit_action_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_adjust_rotation()
 		
+	def __exit_sequence_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_centering__rotate_to_wall(self):
+		"""Default exit sequence for state Centering: rotate to wall.
+		"""
+		self.__state_vector[0] = self.State.null_state
+		self.__state_conf_vector_position = 0
+		self.__exit_action_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_centering__rotate_to_wall()
+		
+	def __exit_sequence_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_centering__move_closer_to_wall(self):
+		"""Default exit sequence for state Centering: move closer to wall.
+		"""
+		self.__state_vector[0] = self.State.null_state
+		self.__state_conf_vector_position = 0
+		self.__exit_action_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_centering__move_closer_to_wall()
+		
+	def __exit_sequence_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_centering__rotate_back_(self):
+		"""Default exit sequence for state Centering: rotate back .
+		"""
+		self.__state_vector[0] = self.State.null_state
+		self.__state_conf_vector_position = 0
+		self.__exit_action_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_centering__rotate_back_()
+		
+	def __exit_sequence_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_centering__move_away_from_wall(self):
+		"""Default exit sequence for state Centering: move away from wall.
+		"""
+		self.__state_vector[0] = self.State.null_state
+		self.__state_conf_vector_position = 0
+		self.__exit_action_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_centering__move_away_from_wall()
+		
+	def __exit_sequence_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_adjust_vertical(self):
+		"""Default exit sequence for state Adjust vertical.
+		"""
+		self.__state_vector[0] = self.State.null_state
+		self.__state_conf_vector_position = 0
+		self.__exit_action_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_adjust_vertical()
+		
 	def __exit_sequence_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_prepare_calibration(self):
 		"""Default exit sequence for state prepare calibration.
 		"""
@@ -1492,6 +1634,21 @@ class Model:
 		elif state == self.State.sautonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0adjust_rotation:
 			self.__exit_sequence_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_adjust_rotation()
 			self.__exit_action_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration()
+		elif state == self.State.sautonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0centering__rotate_to_wall:
+			self.__exit_sequence_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_centering__rotate_to_wall()
+			self.__exit_action_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration()
+		elif state == self.State.sautonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0centering__move_closer_to_wall:
+			self.__exit_sequence_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_centering__move_closer_to_wall()
+			self.__exit_action_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration()
+		elif state == self.State.sautonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0centering__rotate_back_:
+			self.__exit_sequence_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_centering__rotate_back_()
+			self.__exit_action_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration()
+		elif state == self.State.sautonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0centering__move_away_from_wall:
+			self.__exit_sequence_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_centering__move_away_from_wall()
+			self.__exit_action_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration()
+		elif state == self.State.sautonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0adjust_vertical:
+			self.__exit_sequence_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_adjust_vertical()
+			self.__exit_action_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration()
 		elif state == self.State.sautonomous_mode___logging_calibration_on_entry_to_the_maze_prepare_calibration:
 			self.__exit_sequence_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_prepare_calibration()
 		elif state == self.State.sprepare:
@@ -1586,6 +1743,21 @@ class Model:
 		elif state == self.State.sautonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0adjust_rotation:
 			self.__exit_sequence_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_adjust_rotation()
 			self.__exit_action_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration()
+		elif state == self.State.sautonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0centering__rotate_to_wall:
+			self.__exit_sequence_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_centering__rotate_to_wall()
+			self.__exit_action_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration()
+		elif state == self.State.sautonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0centering__move_closer_to_wall:
+			self.__exit_sequence_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_centering__move_closer_to_wall()
+			self.__exit_action_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration()
+		elif state == self.State.sautonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0centering__rotate_back_:
+			self.__exit_sequence_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_centering__rotate_back_()
+			self.__exit_action_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration()
+		elif state == self.State.sautonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0centering__move_away_from_wall:
+			self.__exit_sequence_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_centering__move_away_from_wall()
+			self.__exit_action_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration()
+		elif state == self.State.sautonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0adjust_vertical:
+			self.__exit_sequence_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_adjust_vertical()
+			self.__exit_action_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration()
 		elif state == self.State.sautonomous_mode___logging_calibration_on_entry_to_the_maze_prepare_calibration:
 			self.__exit_sequence_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_prepare_calibration()
 		
@@ -1653,6 +1825,14 @@ class Model:
 			self.__exit_sequence_s_autonomous_mode___logging_orientation_check_south()
 		elif state == self.State.sautonomous_mode___logging_orientation_check_east:
 			self.__exit_sequence_s_autonomous_mode___logging_orientation_check_east()
+		
+	def __react_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0__choice_0(self):
+		"""The reactions of state null..
+		"""
+		if self.laser_distance.d0 > ((self.grid.grid_size / 2)):
+			self.__enter_sequence_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_centering__move_closer_to_wall_default()
+		elif self.laser_distance.d0 <= ((self.grid.grid_size / 2)):
+			self.__enter_sequence_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_centering__move_away_from_wall_default()
 		
 	def __react_s_manual_mode_manual_mode__entry_default(self):
 		"""Default react sequence for initial entry .
@@ -1852,7 +2032,7 @@ class Model:
 			if transitioned_after < 0:
 				if self.laser_distance.d90 < ((self.grid.grid_size * 2)) and self.laser_distance.dm90 < ((self.grid.grid_size * 2)):
 					self.__exit_sequence_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_creep()
-					self.__enter_sequence_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_set_zero_default()
+					self.__enter_sequence_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_centering__rotate_to_wall_default()
 					transitioned_after = 0
 		return transitioned_after
 	
@@ -1865,8 +2045,8 @@ class Model:
 		if self.__do_completion:
 			self.__state_vector[0] = self.State.null_state
 			self.__state_conf_vector_position = 0
-			self.__entry_action_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_adjust_rotation()
-			self.__state_vector[0] = self.State.sautonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0adjust_rotation
+			self.__entry_action_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_position_in_the_middle_()
+			self.__state_vector[0] = self.State.sautonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0position_in_the_middle_
 			self.__state_conf_vector_position = 0
 			self.__state_conf_vector_changed = True
 		return transitioned_after
@@ -1904,7 +2084,77 @@ class Model:
 				if self.__time_events[0]:
 					self.__exit_sequence_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_adjust_rotation()
 					self.__time_events[0] = False
-					self.__enter_sequence_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_position_in_the_middle__default()
+					self.__enter_sequence_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_adjust_vertical_default()
+					transitioned_after = 0
+		return transitioned_after
+	
+	
+	def __s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_centering__rotate_to_wall_react(self, transitioned_before):
+		"""Implementation of __s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_centering__rotate_to_wall_react function.
+		"""
+		transitioned_after = transitioned_before
+		transitioned_after = self.__s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_react(transitioned_before)
+		if not self.__do_completion:
+			if transitioned_after < 0:
+				if (self.user_var.current_orientation != self.grid.orientation):
+					self.__exit_sequence_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_centering__rotate_to_wall()
+					self.__react_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0__choice_0()
+					transitioned_after = 0
+		return transitioned_after
+	
+	
+	def __s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_centering__move_closer_to_wall_react(self, transitioned_before):
+		"""Implementation of __s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_centering__move_closer_to_wall_react function.
+		"""
+		transitioned_after = transitioned_before
+		transitioned_after = self.__s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_react(transitioned_before)
+		if not self.__do_completion:
+			if transitioned_after < 0:
+				if self.laser_distance.d0 < ((self.grid.grid_size / 2)):
+					self.__exit_sequence_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_centering__move_closer_to_wall()
+					self.__enter_sequence_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_centering__rotate_back__default()
+					transitioned_after = 0
+		return transitioned_after
+	
+	
+	def __s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_centering__rotate_back__react(self, transitioned_before):
+		"""Implementation of __s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_centering__rotate_back__react function.
+		"""
+		transitioned_after = transitioned_before
+		transitioned_after = self.__s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_react(transitioned_before)
+		if not self.__do_completion:
+			if transitioned_after < 0:
+				if (self.user_var.current_orientation != self.grid.orientation):
+					self.__exit_sequence_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_centering__rotate_back_()
+					self.__enter_sequence_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_adjust_rotation_default()
+					transitioned_after = 0
+		return transitioned_after
+	
+	
+	def __s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_centering__move_away_from_wall_react(self, transitioned_before):
+		"""Implementation of __s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_centering__move_away_from_wall_react function.
+		"""
+		transitioned_after = transitioned_before
+		transitioned_after = self.__s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_react(transitioned_before)
+		if not self.__do_completion:
+			if transitioned_after < 0:
+				if self.laser_distance.d0 >= ((self.grid.grid_size / 2)):
+					self.__exit_sequence_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_centering__move_away_from_wall()
+					self.__enter_sequence_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_centering__rotate_back__default()
+					transitioned_after = 0
+		return transitioned_after
+	
+	
+	def __s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_adjust_vertical_react(self, transitioned_before):
+		"""Implementation of __s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_adjust_vertical_react function.
+		"""
+		transitioned_after = transitioned_before
+		transitioned_after = self.__s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_react(transitioned_before)
+		if not self.__do_completion:
+			if transitioned_after < 0:
+				if self.laser_distance.d90 > ((self.grid.grid_size * 2)) and self.laser_distance.dm90 > ((self.grid.grid_size * 2)):
+					self.__exit_sequence_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_adjust_vertical()
+					self.__enter_sequence_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_set_zero_default()
 					transitioned_after = 0
 		return transitioned_after
 	
@@ -2348,6 +2598,16 @@ class Model:
 			transitioned = self.__s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_ready__react(transitioned)
 		elif state == self.State.sautonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0adjust_rotation:
 			transitioned = self.__s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_adjust_rotation_react(transitioned)
+		elif state == self.State.sautonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0centering__rotate_to_wall:
+			transitioned = self.__s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_centering__rotate_to_wall_react(transitioned)
+		elif state == self.State.sautonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0centering__move_closer_to_wall:
+			transitioned = self.__s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_centering__move_closer_to_wall_react(transitioned)
+		elif state == self.State.sautonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0centering__rotate_back_:
+			transitioned = self.__s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_centering__rotate_back__react(transitioned)
+		elif state == self.State.sautonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0centering__move_away_from_wall:
+			transitioned = self.__s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_centering__move_away_from_wall_react(transitioned)
+		elif state == self.State.sautonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_region0adjust_vertical:
+			transitioned = self.__s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_adjust_vertical_react(transitioned)
 		elif state == self.State.sautonomous_mode___logging_calibration_on_entry_to_the_maze_prepare_calibration:
 			transitioned = self.__s_autonomous_mode___logging_calibration_on_entry_to_the_maze_prepare_calibration_react(transitioned)
 		elif state == self.State.sprepare:
