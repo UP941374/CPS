@@ -31,6 +31,7 @@ Below you will find some useful links and notes.
 `env | grep ROS    # check if ROS_DOMAIN_ID's match`
 `export TURTLEBOT3_MODEL=burger`
 
+`pcs-lm-01.lab.uvalight.net `
 
 
 
