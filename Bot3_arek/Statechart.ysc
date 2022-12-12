@@ -54,7 +54,7 @@
               </vertices>
               <vertices xsi:type="sgraph:State" xmi:id="_wvEXEHZzEe2u3bOs4NomlA" specification="entry / &#xA;userVar.startprocedure = false;&#xA;userVar.userX = odom.x;&#xA;userVar.userY = odom.y;&#xA;grid.column = 0;&#xA;grid.row = 0" name="Ready!" incomingTransitions="_xVxKsHZzEe2u3bOs4NomlA"/>
               <vertices xsi:type="sgraph:State" xmi:id="_bkKqIHZ0Ee2u3bOs4NomlA" specification="entry /&#xA;userVar.straighten = true&#xA;exit / &#xA;userVar.straighten = false&#xA;&#xA;" name="Adjust rotation" incomingTransitions="_J-ChgHlUEe2rboATBtX7Bg">
-                <outgoingTransitions xmi:id="_SIp9EHlVEe2rboATBtX7Bg" specification="after 3s" target="_QMAqMHlVEe2rboATBtX7Bg"/>
+                <outgoingTransitions xmi:id="_SIp9EHlVEe2rboATBtX7Bg" specification="after 5s" target="_QMAqMHlVEe2rboATBtX7Bg"/>
               </vertices>
               <vertices xsi:type="sgraph:State" xmi:id="_8VvxwHlREe2rboATBtX7Bg" specification="entry / &#xA;output.rotation = 0.5;&#xA;userVar.currentOrientation = userVar.orientation&#xA;exit /&#xA;output.rotation = 0.0" name="Centering: rotate to wall" incomingTransitions="_4wXjlXIfEe23_9tCedQbZw">
                 <outgoingTransitions xmi:id="_eIrgwHlSEe2rboATBtX7Bg" specification="[&#xA;(userVar.currentOrientation != grid.orientation)&#x9;&#xA;]" target="_M4fV4HlTEe2rboATBtX7Bg"/>
@@ -160,10 +160,10 @@
             <outgoingTransitions xmi:id="_T1HB0HZ2Ee2u3bOs4NomlA" specification="[((imu.yaw > 0.0 &amp;&amp; imu.yaw &lt; 45.0) || &#xA;(imu.yaw > -90.0 &amp;&amp; imu.yaw &lt; -45.0) || &#xA;(imu.yaw > -180 &amp;&amp; imu.yaw &lt; -135.0) || &#xA;(imu.yaw > 90.0 &amp;&amp; imu.yaw &lt; 135.0) ||&#xA;(-180 &lt; imu.yaw  &amp;&amp; imu.yaw  &lt; -175))&#xA;&amp;&amp; userVar.straighten == true&#xA;]" target="_K2ExoHZzEe2u3bOs4NomlA"/>
             <outgoingTransitions xmi:id="_ZEkT0HZ3Ee2edIMNc8oGnw" specification="[userVar.straighten == false]" target="_X5MF0HZ3Ee2edIMNc8oGnw"/>
           </vertices>
-          <vertices xsi:type="sgraph:State" xmi:id="_4wth23IfEe23_9tCedQbZw" specification="entry / &#xA;output.rotation=0.05/(userVar.calibrationIncrement/5)&#xA;exit / &#xA;userVar.calibrationIncrement += 1" name="rotate left" incomingTransitions="_Po6uMHZ2Ee2u3bOs4NomlA">
+          <vertices xsi:type="sgraph:State" xmi:id="_4wth23IfEe23_9tCedQbZw" specification="entry / &#xA;output.rotation=0.05/(userVar.calibrationIncrement/8)&#xA;exit / &#xA;userVar.calibrationIncrement += 1" name="rotate left" incomingTransitions="_Po6uMHZ2Ee2u3bOs4NomlA">
             <outgoingTransitions xmi:id="_K2dMIHZzEe2u3bOs4NomlA" specification="" target="_K2fBUHZzEe2u3bOs4NomlA"/>
           </vertices>
-          <vertices xsi:type="sgraph:State" xmi:id="_K2ExoHZzEe2u3bOs4NomlA" specification="entry / &#xA;output.rotation=-0.05/(userVar.calibrationIncrement/5)&#xA;exit/&#xA;userVar.calibrationIncrement += 1" name="rotate right" incomingTransitions="_T1HB0HZ2Ee2u3bOs4NomlA">
+          <vertices xsi:type="sgraph:State" xmi:id="_K2ExoHZzEe2u3bOs4NomlA" specification="entry / &#xA;output.rotation=-0.05/(userVar.calibrationIncrement/8)&#xA;exit/&#xA;userVar.calibrationIncrement += 1" name="rotate right" incomingTransitions="_T1HB0HZ2Ee2u3bOs4NomlA">
             <outgoingTransitions xmi:id="_K2clEHZzEe2u3bOs4NomlA" specification="" target="_K2fBUHZzEe2u3bOs4NomlA"/>
           </vertices>
           <vertices xsi:type="sgraph:State" xmi:id="_X5MF0HZ3Ee2edIMNc8oGnw" specification="entry /&#xA;output.rotation = 0.0;&#xA;userVar.calibrationIncrement = 1" name="Stop Calibration" incomingTransitions="_ZEkT0HZ3Ee2edIMNc8oGnw">

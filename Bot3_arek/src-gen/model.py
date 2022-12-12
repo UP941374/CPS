@@ -664,7 +664,7 @@ class Model:
 	def __entry_action_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_adjust_rotation(self):
 		"""Entry action for state 'Adjust rotation'..
 		"""
-		self.timer_service.set_timer(self, 0, (3 * 1000), False)
+		self.timer_service.set_timer(self, 0, (5 * 1000), False)
 		self.user_var.straighten = True
 		
 	def __entry_action_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_centering__rotate_to_wall(self):
@@ -803,13 +803,13 @@ class Model:
 	def __entry_action_s_autonomous_mode___logging_rotation_calibration_rotate_left(self):
 		""".
 		"""
-		self.output.rotation = (0.05 / ((self.user_var.calibration_increment / 5)))
+		self.output.rotation = (0.05 / ((self.user_var.calibration_increment / 8)))
 		self.__completed = True
 		
 	def __entry_action_s_autonomous_mode___logging_rotation_calibration_rotate_right(self):
 		""".
 		"""
-		self.output.rotation = (-0.05 / ((self.user_var.calibration_increment / 5)))
+		self.output.rotation = (-0.05 / ((self.user_var.calibration_increment / 8)))
 		self.__completed = True
 		
 	def __entry_action_s_autonomous_mode___logging_rotation_calibration_stop_calibration(self):
