@@ -41,7 +41,7 @@
           <vertices xsi:type="sgraph:State" xmi:id="_4wVuWXIfEe23_9tCedQbZw" specification="exit / userVar.startprocedure = false" name="Calibration" incomingTransitions="_4wYxwXIfEe23_9tCedQbZw">
             <regions xmi:id="_4wXjgHIfEe23_9tCedQbZw" name="">
               <vertices xsi:type="sgraph:State" xmi:id="_4wXjgXIfEe23_9tCedQbZw" specification="entry / &#xA;output.speed=0.025&#xA;exit / &#xA;output.speed=0.0" name="Creep" incomingTransitions="_4wYxsXIfEe23_9tCedQbZw">
-                <outgoingTransitions xmi:id="_4wXjlXIfEe23_9tCedQbZw" specification="[laserDistance.d90 &lt; (grid.gridSize*2)]" target="_8VvxwHlREe2rboATBtX7Bg"/>
+                <outgoingTransitions xmi:id="_4wXjlXIfEe23_9tCedQbZw" specification="[&#xA;&#x9;laserDistance.d90 &lt; (grid.gridSize*2) ||&#xA;&#x9;laserDistance.dm90 &lt; (grid.gridSize*2)&#xA;]" target="_8VvxwHlREe2rboATBtX7Bg"/>
               </vertices>
               <vertices xsi:type="sgraph:State" xmi:id="_4wYKnXIfEe23_9tCedQbZw" specification="entry / &#xA;startPos.setZero = true" name="Set Zero" incomingTransitions="_ZumawHlVEe2rboATBtX7Bg" documentation="entry / &#xA;userVar.startprocedure = false; &#xA;userVar.straighten = true">
                 <outgoingTransitions xmi:id="_LGRU4HlUEe2rboATBtX7Bg" specification="" target="_4wYxsnIfEe23_9tCedQbZw"/>
@@ -75,7 +75,7 @@
                 <outgoingTransitions xmi:id="_7FcVkHlTEe2rboATBtX7Bg" specification="[laserDistance.d0 >= (grid.gridSize/2)]" target="_64tWkHlSEe2rboATBtX7Bg"/>
               </vertices>
               <vertices xsi:type="sgraph:State" xmi:id="_QMAqMHlVEe2rboATBtX7Bg" specification="entry /&#xA;output.speed = -0.025&#xA;exit /&#xA;output.speed = 0.0" name="Adjust vertical" incomingTransitions="_SIp9EHlVEe2rboATBtX7Bg">
-                <outgoingTransitions xmi:id="_ZumawHlVEe2rboATBtX7Bg" specification="[laserDistance.d90 > (grid.gridSize*2)]" target="_4wYKnXIfEe23_9tCedQbZw"/>
+                <outgoingTransitions xmi:id="_ZumawHlVEe2rboATBtX7Bg" specification="[&#xA;&#x9;laserDistance.d90 &lt; (grid.gridSize*2) ||&#xA;&#x9;laserDistance.dm90 &lt; (grid.gridSize*2)&#xA;]" target="_4wYKnXIfEe23_9tCedQbZw"/>
               </vertices>
             </regions>
           </vertices>
@@ -1294,7 +1294,7 @@
     <edges xmi:id="_4xF8WnIfEe23_9tCedQbZw" type="Transition" element="_4wXjlXIfEe23_9tCedQbZw" source="_Un6sgnljEe2rboATBtX7Bg" target="_Un6syHljEe2rboATBtX7Bg">
       <children xsi:type="notation:DecorationNode" xmi:id="_4xF8W3IfEe23_9tCedQbZw" type="TransitionExpression">
         <styles xsi:type="notation:ShapeStyle" xmi:id="_4xF8XHIfEe23_9tCedQbZw"/>
-        <layoutConstraint xsi:type="notation:Location" xmi:id="_4xF8XXIfEe23_9tCedQbZw" x="1" y="-18"/>
+        <layoutConstraint xsi:type="notation:Location" xmi:id="_4xF8XXIfEe23_9tCedQbZw" x="2" y="-31"/>
       </children>
       <styles xsi:type="notation:ConnectorStyle" xmi:id="_4xF8XnIfEe23_9tCedQbZw" routing="Rectilinear" lineColor="4210752"/>
       <styles xsi:type="notation:FontStyle" xmi:id="_4xF8X3IfEe23_9tCedQbZw" fontName="Verdana"/>
@@ -1900,7 +1900,7 @@
     <edges xmi:id="_Zuno4HlVEe2rboATBtX7Bg" type="Transition" element="_ZumawHlVEe2rboATBtX7Bg" source="_Un6s-nljEe2rboATBtX7Bg" target="_Un6sjnljEe2rboATBtX7Bg">
       <children xsi:type="notation:DecorationNode" xmi:id="_ZuoP8XlVEe2rboATBtX7Bg" type="TransitionExpression">
         <styles xsi:type="notation:ShapeStyle" xmi:id="_ZuoP8nlVEe2rboATBtX7Bg"/>
-        <layoutConstraint xsi:type="notation:Location" xmi:id="_ZuoP83lVEe2rboATBtX7Bg" x="48" y="-22"/>
+        <layoutConstraint xsi:type="notation:Location" xmi:id="_ZuoP83lVEe2rboATBtX7Bg" x="47" y="-34"/>
       </children>
       <styles xsi:type="notation:ConnectorStyle" xmi:id="_Zuno4XlVEe2rboATBtX7Bg" routing="Rectilinear" lineColor="4210752"/>
       <styles xsi:type="notation:FontStyle" xmi:id="_ZuoP8HlVEe2rboATBtX7Bg" fontName="Verdana"/>

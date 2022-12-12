@@ -2030,7 +2030,7 @@ class Model:
 		transitioned_after = self.__s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_react(transitioned_before)
 		if not self.__do_completion:
 			if transitioned_after < 0:
-				if self.laser_distance.d90 < ((self.grid.grid_size * 2)):
+				if self.laser_distance.d90 < ((self.grid.grid_size * 2)) or self.laser_distance.dm90 < ((self.grid.grid_size * 2)):
 					self.__exit_sequence_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_creep()
 					self.__enter_sequence_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_centering__rotate_to_wall_default()
 					transitioned_after = 0
@@ -2152,7 +2152,7 @@ class Model:
 		transitioned_after = self.__s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration_react(transitioned_before)
 		if not self.__do_completion:
 			if transitioned_after < 0:
-				if self.laser_distance.d90 > ((self.grid.grid_size * 2)):
+				if self.laser_distance.d90 < ((self.grid.grid_size * 2)) or self.laser_distance.dm90 < ((self.grid.grid_size * 2)):
 					self.__exit_sequence_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_adjust_vertical()
 					self.__enter_sequence_s_autonomous_mode___logging_calibration_on_entry_to_the_maze_calibration__region0_set_zero_default()
 					transitioned_after = 0
