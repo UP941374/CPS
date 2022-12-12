@@ -1,5 +1,0 @@
-rotate right -> test
-[laserDistance.d90 - laserDistance.dm90 > -0.05 && laserDistance.d90 - laserDistance.dm90 < 0.05]
-
-rotate left -> test
-[laserDistance.d90 - laserDistance.dm90 > -0.05 && laserDistance.d90 - laserDistance.dm90 < 0.05]
