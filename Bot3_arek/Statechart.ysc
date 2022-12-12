@@ -41,7 +41,7 @@
           <vertices xsi:type="sgraph:State" xmi:id="_4wVuWXIfEe23_9tCedQbZw" specification="exit / userVar.startprocedure = false" name="Calibration" incomingTransitions="_4wYxwXIfEe23_9tCedQbZw">
             <regions xmi:id="_4wXjgHIfEe23_9tCedQbZw" name="">
               <vertices xsi:type="sgraph:State" xmi:id="_4wXjgXIfEe23_9tCedQbZw" specification="entry / &#xA;output.speed=0.025&#xA;exit / &#xA;output.speed=0.0" name="Creep" incomingTransitions="_4wYxsXIfEe23_9tCedQbZw">
-                <outgoingTransitions xmi:id="_4wXjlXIfEe23_9tCedQbZw" specification="[laserDistance.d90 &lt; (grid.gridSize*2) &amp;&amp; &#xA;laserDistance.dm90 &lt; (grid.gridSize*2)]" target="_8VvxwHlREe2rboATBtX7Bg"/>
+                <outgoingTransitions xmi:id="_4wXjlXIfEe23_9tCedQbZw" specification="[laserDistance.d90 &lt; (grid.gridSize*2)]" target="_8VvxwHlREe2rboATBtX7Bg"/>
               </vertices>
               <vertices xsi:type="sgraph:State" xmi:id="_4wYKnXIfEe23_9tCedQbZw" specification="entry / &#xA;startPos.setZero = true" name="Set Zero" incomingTransitions="_ZumawHlVEe2rboATBtX7Bg" documentation="entry / &#xA;userVar.startprocedure = false; &#xA;userVar.straighten = true">
                 <outgoingTransitions xmi:id="_LGRU4HlUEe2rboATBtX7Bg" specification="" target="_4wYxsnIfEe23_9tCedQbZw"/>
@@ -75,7 +75,7 @@
                 <outgoingTransitions xmi:id="_7FcVkHlTEe2rboATBtX7Bg" specification="[laserDistance.d0 >= (grid.gridSize/2)]" target="_64tWkHlSEe2rboATBtX7Bg"/>
               </vertices>
               <vertices xsi:type="sgraph:State" xmi:id="_QMAqMHlVEe2rboATBtX7Bg" specification="entry /&#xA;output.speed = -0.025&#xA;exit /&#xA;output.speed = 0.0" name="Adjust vertical" incomingTransitions="_SIp9EHlVEe2rboATBtX7Bg">
-                <outgoingTransitions xmi:id="_ZumawHlVEe2rboATBtX7Bg" specification="[laserDistance.d90 > (grid.gridSize*2) &amp;&amp; &#xA;laserDistance.dm90 > (grid.gridSize*2)]" target="_4wYKnXIfEe23_9tCedQbZw"/>
+                <outgoingTransitions xmi:id="_ZumawHlVEe2rboATBtX7Bg" specification="[laserDistance.d90 > (grid.gridSize*2)]" target="_4wYKnXIfEe23_9tCedQbZw"/>
               </vertices>
             </regions>
           </vertices>
